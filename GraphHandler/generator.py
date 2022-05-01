@@ -11,10 +11,10 @@ def sin_f(x):
 
 #CREATE LEAST SQUARES ANALYTICAL SOLUTION FUNCTION 
 
-def Q3(rank):
+def Q3(rank,outputName):
   #CREATE MATRIX WITH RANK-ORDER
-  X=np.random.rand(10,1)
-  Y=np.random.rand(10,1)
+  X=np.random.rand(100,1)
+  Y=np.random.rand(100,1)
   ADup=np.zeros_like(X)
   RANK=rank+1
   A=np.zeros_like(X)
@@ -41,7 +41,7 @@ def Q3(rank):
   # pointSinY=sin_f(pointsX)
   # plt.plot(pointsX,pointSinY,color = 'green')
 #   plt.plot(X,Y,'ro')
-  plt.savefig('foo.png')
-  return W,pointsY[500],pointsY
+  plt.savefig(outputName)
+  return W,pointsY
 
 

@@ -77,7 +77,8 @@ def loss(pX,pY,yBottom,yTop,RANK,W):
   # plt.show()
   return LOSS/len(pX)
 
-def Proccess(W,Ycenter,yDraw,RANK):
+def Proccess(W,yDraw,RANK):
+    Ycenter=yDraw[500]
     pointsX=np.linspace(0,1,1000)
     img=cv2.imread('input.png',0)
     # cv2.imshow('input',img)
@@ -112,7 +113,6 @@ def Proccess(W,Ycenter,yDraw,RANK):
     centerDistanceY=Ycenter-poiY[len(poiY)//2]
     plt.plot(poiX,poiY,'red')
     plt.plot(pointsX,yDraw,'blue')
-    plt.show()
     print('distance after fit center',centerDistanceY)
     print('loss after fit center',loss(poiX,poiY,min(yDraw),max(yDraw),RANK,W))
     print('limit',min(yDraw),max(yDraw))
@@ -120,6 +120,7 @@ def Proccess(W,Ycenter,yDraw,RANK):
         print('Correct')
     else:
         print('wrong')
+    plt.show()
 
 
 
