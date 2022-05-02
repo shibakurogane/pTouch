@@ -2,9 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import cv2
-# from google.colab.patches import cv2_imshow
-# X=np.array([0.349526784, 1.6974435, 5.384308891, 2.044150596, 4.578814506, 3.241690807, 2.535931731, 2.210580888, 3.397474351, 5.972933146, 5.114704101]).reshape(11,1)
-# Y=np.array([0.254020646, 0.790556868, -0.81239532, 1.012143475, -0.904558188, -0.167456361, 0.482547054, 0.878514378, -0.210093715, -0.128786937, -0.866501299]).reshape(11,1)
 pointsX=np.linspace(0,1,1000)
 def sin_f(x):
   return np.sin(x)        
@@ -38,10 +35,10 @@ def Q3(rank,outputName):
     pointsY+=W[i][0]*pointsX**i
   #DRAWING
   plt.plot(pointsX,pointsY,'blue')
-  # pointSinY=sin_f(pointsX)
-  # plt.plot(pointsX,pointSinY,color = 'green')
-#   plt.plot(X,Y,'ro')
+
+  plt.axis('off')
   plt.savefig(outputName)
+  plt.clf()
   return W,pointsY
 
 

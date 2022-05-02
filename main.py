@@ -31,11 +31,6 @@ DRAW_GRID_LINES = True
 
 def get_font(size):
     return pygame.font.SysFont("comicsans", size)
-def get_pixel_data(surf, top_left, bottom_right):
-    w = bottom_right[0] - top_left[0]
-    h = bottom_right[1] - top_left[1]
-    sub_surface = surf.subsurface(pygame.Rect(*top_left, w, h))
-    return sub_surface
 
 clock = pygame.time.Clock()
 
@@ -46,14 +41,15 @@ line=[]
 createdImage=False
 playerDraw=False
 graphD=[]
-RANK=0
+RANK=1
+W,yDraw=generator.Q3(RANK,'foo.png')
+graphD=pygame.image.load('foo.png').convert()
 while run:
     clock.tick(FPS)
     screen.fill(BG_COLOR)
     pygame.draw.line(screen,BLACK,(700,0),(700,700))
     pygame.draw.line(screen,BLACK,(700,400),(1000,400))
-    if createdImage==True:
-        screen.blit(graphD,(0,0))
+    screen.blit(graphD,(0,0))
     for i in range(len(line)):
         pygame.draw.circle(screen,BLACK,(line[i][0],line[i][1]),2)
     for event in pygame.event.get():
@@ -66,20 +62,20 @@ while run:
         else:
             if playerDraw==True:
                 playerDraw=False
-                pxarray = get_pixel_data(screen,[701,401],[1000,700])
+                # pxarray = imagePredict.get_pixel_data(screen,[701,401],[1000,700])
                 # print(pxarray.shape)
                 # plt.imsave('image.png',pxarray)
-                pygame.image.save(pxarray,'input.png')
-                imagePredict.Proccess(W,yDraw,RANK)
+                # pygame.image.save(pxarray,'input.png')
+                PredictResult=imagePredict.Proccess(W,yDraw,RANK,line)
+                line=[]
+                if PredictResult:
+                    RANK+=1
+                    W,yDraw=generator.Q3(RANK,'foo.png')
+                    graphD=pygame.image.load('foo.png').convert()
         if event.type ==pygame.KEYDOWN:
             if event.key==pygame.K_p:
                 line=[]
-                RANK+=1
-                W,yDraw=generator.Q3(RANK,'foo.png')
-                minY=min(yDraw)
-                maxY=max(yDraw)
-                graphD=pygame.image.load('foo.png').convert()
-                createdImage=True
+                
     # for i in range(len(yDraw)):
     #     pygame.draw.circle(screen,BLACK,(pointsX[i],yDraw[i]*10),2)
     pygame.display.update()
