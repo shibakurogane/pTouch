@@ -31,26 +31,19 @@ DRAW_GRID_LINES = True
 
 def get_font(size):
     return pygame.font.SysFont("comicsans", size)
-def get_pixel_data(surf, top_left, bottom_right):
-    w = bottom_right[0] - top_left[0]
-    h = bottom_right[1] - top_left[1]
-    sub_surface = surf.subsurface(pygame.Rect(*top_left, w, h))
-    return sub_surface
 
 clock = pygame.time.Clock()
 
-RANK=5
-W,Ycenter,yDraw=generator.Q3(RANK)
-minY=min(yDraw)
-maxY=max(yDraw)
-# pointsX=np.linspace(0,100,1000)
-# for i in range(len(yDraw)):
-#     yDraw[i]=yDraw[i]-minY
-print(yDraw)
+
+
 run=True
 line=[]
+createdImage=False
+playerDraw=False
+graphD=[]
+RANK=1
+W,yDraw=generator.Q3(RANK,'foo.png')
 graphD=pygame.image.load('foo.png').convert()
-
 while run:
     clock.tick(FPS)
     screen.fill(BG_COLOR)
@@ -65,14 +58,24 @@ while run:
         if pygame.mouse.get_pressed()[0]:
             positionX,positionY=pygame.mouse.get_pos()
             line.append((pygame.mouse.get_pos()))
-        if event.type ==pygame.KEYDOWN:
-            if event.key==pygame.K_k:
-                pxarray = get_pixel_data(screen,[701,401],[1000,700])
+            playerDraw=True
+        else:
+            if playerDraw==True:
+                playerDraw=False
+                # pxarray = imagePredict.get_pixel_data(screen,[701,401],[1000,700])
                 # print(pxarray.shape)
                 # plt.imsave('image.png',pxarray)
-                pygame.image.save(pxarray,'input.png')
+                # pygame.image.save(pxarray,'input.png')
+                PredictResult=imagePredict.Proccess(W,yDraw,RANK,line)
+                line=[]
+                if PredictResult:
+                    RANK+=1
+                    W,yDraw=generator.Q3(RANK,'foo.png')
+                    graphD=pygame.image.load('foo.png').convert()
+        if event.type ==pygame.KEYDOWN:
             if event.key==pygame.K_p:
-                imagePredict.Proccess(W,Ycenter,yDraw,RANK)
+                line=[]
+                
     # for i in range(len(yDraw)):
     #     pygame.draw.circle(screen,BLACK,(pointsX[i],yDraw[i]*10),2)
     pygame.display.update()
