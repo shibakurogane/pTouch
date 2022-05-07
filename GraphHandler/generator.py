@@ -8,7 +8,7 @@ def sin_f(x):
 
 #CREATE LEAST SQUARES ANALYTICAL SOLUTION FUNCTION 
 
-def Q3(rank,outputName):
+def CreateGraph(rank,outputName):
   #CREATE MATRIX WITH RANK-ORDER
   X=np.random.rand(100,1)
   Y=np.random.rand(100,1)
@@ -34,7 +34,7 @@ def Q3(rank,outputName):
   for i in range(RANK):
     pointsY+=W[i][0]*pointsX**i
   #DRAWING
-  plt.plot(pointsX,pointsY,'blue')
+  plt.plot(pointsX,pointsY,'blue',linewidth=20)
 
   plt.axis('off')
   plt.savefig(outputName)

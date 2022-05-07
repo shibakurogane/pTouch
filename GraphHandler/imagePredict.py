@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import cv2
+import pygame
 from sklearn.preprocessing import StandardScaler
 def leftBorderDetect(img):
   for x in range(img.shape[1]):
@@ -140,10 +141,11 @@ def Proccess(W,yDraw,RANK,line):
     centerDistanceY=Ycenter-poiY[len(poiY)//2]
     # plt.plot(poiX,poiY,'red')
     # plt.plot(pointsX,yDraw,'blue')
+    # plt.show()
     print('distance after fit center',centerDistanceY)
     print('loss after fit center',loss(poiX,poiY,min(yDraw),max(yDraw),RANK,W))
     print('limit',min(yDraw),max(yDraw))
-    if(loss(poiX,poiY,min(yDraw),max(yDraw),RANK,W)<0.05):
+    if(loss(poiX,poiY,min(yDraw),max(yDraw),RANK,W)<0.1):
         print('Correct')
         return True
     else:

@@ -41,8 +41,8 @@ line=[]
 createdImage=False
 playerDraw=False
 graphD=[]
-RANK=1
-W,yDraw=generator.Q3(RANK,'foo.png')
+RANK=1 # bac cua ham 
+W,yDraw=generator.CreateGraph(RANK,'foo.png') # w: he so cua ham 
 graphD=pygame.image.load('foo.png').convert()
 while run:
     clock.tick(FPS)
@@ -70,7 +70,7 @@ while run:
                 line=[]
                 if PredictResult:
                     RANK+=1
-                    W,yDraw=generator.Q3(RANK,'foo.png')
+                    W,yDraw=generator.CreateGraph(RANK,'foo.png')
                     graphD=pygame.image.load('foo.png').convert()
         if event.type ==pygame.KEYDOWN:
             if event.key==pygame.K_p:
