@@ -36,10 +36,10 @@ WHITE = (255, 255, 255)
 YELLOW = (255, 255, 102)
  
 #
-SCREEN_WIDTH = 1000
+SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 800
 SPEED=5
-SCORE = 0
+SCORE = 10
 GOLD=0
 PREVIOUS_SCORE=0
 HIGH_SCORE=0
@@ -72,14 +72,25 @@ pygame.display.set_caption("ptouch")
 RANK=1
 W,yDraw=generator.CreateGraph(RANK,'dothi.png')
 dothi=pygame.image.load('dothi.png').convert_alpha()
-obj=pygame.transform.scale(dothi,(objwidth ,objheight)).convert_alpha()
 hinhdothi=pygame.transform.scale(dothi,(100 ,100)).convert_alpha()
+
+obj=pygame.image.load('ppenemy.webp').convert_alpha()
+obj=pygame.transform.scale(obj,(objwidth ,objheight)).convert_alpha()
 
 nv = pygame.image.load('wizard.png').convert_alpha()
 nv = pygame.transform.scale(nv,(nv_width,nv_height))
  
 BG=pygame.image.load('pink.jpg').convert_alpha()
 BG=pygame.transform.scale(BG,(SCREEN_WIDTH,1000))
+
+BG1=pygame.image.load('BlacknWhite.webp').convert_alpha()
+BG1=pygame.transform.scale(BG1,(SCREEN_WIDTH,1000))
+
+BG2=pygame.image.load('BlacknWhite2.png').convert_alpha()
+BG2=pygame.transform.scale(BG2,(SCREEN_WIDTH,1000))
+
+GRASS=pygame.image.load('grass.jpg').convert_alpha()
+GRASS=pygame.transform.scale(GRASS,(500,150))
 
 COIN=pygame.image.load('coin.png').convert_alpha()
 COIN=pygame.transform.scale(COIN,(40,40))
@@ -96,10 +107,11 @@ class Enemy(pygame.sprite.Sprite):
     def move(self):
             global SCORE
             self.rect.move_ip(0,SPEED)
-            if (self.rect.top > (SCREEN_HEIGHT-200)) or imagePredict.Proccess==True:
-                SCORE += 1
+            if (self.rect.bottom > (SCREEN_HEIGHT-80)) or imagePredict.Proccess==True:
+                SCORE -= 1
                 self.rect.top = 0
                 self.rect.center = (random.randint(objwidth,SCREEN_WIDTH-objwidth), 0)
+                
             
  
 class Player(pygame.sprite.Sprite):
@@ -107,7 +119,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__() 
         self.image = nv
         self.surf = pygame.Surface((nv_width,nv_height))
-        self.rect = self.surf.get_rect(center = (SCREEN_WIDTH/2, SCREEN_HEIGHT-200))
+        self.rect = self.surf.get_rect(center = (SCREEN_WIDTH/2, SCREEN_HEIGHT-100))
         
     def move(self):
         pressed_keys = pygame.key.get_pressed()
@@ -125,13 +137,15 @@ class Player(pygame.sprite.Sprite):
                    
 class Background():
       def __init__(self):
-            self.bgimage = BG
-            self.rectBGimg = self.bgimage.get_rect()
+            self.bgimage1 = BG1
+            self.bgimage2 = BG2
+            self.rectBGimg1 = self.bgimage1.get_rect()
+            self.rectBGimg2 = self.bgimage2.get_rect()
  
             self.bgY1 = 0
             self.bgX1 = 0
  
-            self.bgY2 = self.rectBGimg.height
+            self.bgY2 = self.rectBGimg1.height
             self.bgX2 = 0
  
             self.movingUpSpeed = 5
@@ -139,15 +153,18 @@ class Background():
       def update(self):
         self.bgY1 -= self.movingUpSpeed
         self.bgY2 -= self.movingUpSpeed
-        if self.bgY1 <= -self.rectBGimg.height:
-            self.bgY1 = self.rectBGimg.height
-        if self.bgY2 <= -self.rectBGimg.height:
-            self.bgY2 = self.rectBGimg.height
+        if self.bgY1 <= -self.rectBGimg1.height:
+            self.bgY1 = self.rectBGimg1.height
+        if self.bgY2 <= -self.rectBGimg2.height:
+            self.bgY2 = self.rectBGimg2.height
              
       def draw(self):
-        DISPLAYSURF.blit(self.bgimage, (self.bgX1, self.bgY1))
-        DISPLAYSURF.blit(self.bgimage, (self.bgX2, self.bgY2))
-
+        DISPLAYSURF.blit(self.bgimage1, (self.bgX1, self.bgY1))
+        DISPLAYSURF.blit(self.bgimage2, (self.bgX2, self.bgY2))
+        DISPLAYSURF.blit(GRASS,(0,SCREEN_HEIGHT-150))
+        # DISPLAYSURF.blit(GRASS,(0,SCREEN_HEIGHT-(150*2)))
+        DISPLAYSURF.blit(GRASS,(SCREEN_WIDTH-500,SCREEN_HEIGHT-150))
+        # DISPLAYSURF.blit(GRASS,(SCREEN_WIDTH-500,SCREEN_HEIGHT-(150*2)))
         
          
 
@@ -346,7 +363,7 @@ while run:
     #Cycles through all occurring events   
     for event in pygame.event.get():
         if event.type == INC_SPEED:
-              SPEED += 2     
+              SPEED += 0.5     
         if event.type == QUIT:
             run=False
         if pygame.mouse.get_pressed()[0]:
@@ -366,7 +383,7 @@ while run:
                         RANK+=1
                         W,yDraw=generator.CreateGraph(RANK,'dothi.png')
                         dothi=pygame.image.load('dothi.png').convert_alpha()
-                        obj=pygame.transform.scale(dothi,(objwidth ,objheight)).convert_alpha()
+                        # obj=pygame.transform.scale(dothi,(objwidth ,objheight)).convert_alpha()
                         hinhdothi=pygame.transform.scale(dothi,(100 ,100)).convert_alpha()               
         if event.type ==pygame.KEYDOWN:
                 if event.key==pygame.K_p:
@@ -378,7 +395,7 @@ while run:
         #             entity.move()
     bg.update()
     bg.draw()
-    
+    DISPLAYSURF.blit(hinhdothi,(SCREEN_WIDTH/3,0)) 
     #DISPLAYSURF.blit(background, (0,0))
     scores = font_small.render(f"SCORE: {SCORE}", True, BLACK)
     DISPLAYSURF.blit(scores, (10,10))
@@ -397,19 +414,22 @@ while run:
                     
         # DISPLAYSURF.fill(RED)
         # DISPLAYSURF.blit(game_over, (30,250))
+        
+        
+        for entity in all_sprites:
+                # entity.kill()
+                SCORE-=1
+    if SCORE<=0:
+            # GameOver()
+            # time.sleep(1.5)
+            # pygame.quit()
+            # sys.exit()  
         DISPLAYSURF.fill(GREEN)
         Game_over_label=font.render("YOU FUKING IDIOT!!!",1,RED,BLACK)
         DISPLAYSURF.blit(Game_over_label,(SCREEN_WIDTH/2 - Game_over_label.get_width()/2, 400))
         pygame.display.update()
-        
-        for entity in all_sprites:
-                entity.kill()
-            # GameOver()
-        time.sleep(1.5)
-        pygame.quit()
-            # sys.exit()  
-   
-    DISPLAYSURF.blit(hinhdothi,(SCREEN_WIDTH/3,0))       
+    
+          
     pygame.display.update()
     fpsclock.tick(FPS)
     
