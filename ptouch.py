@@ -4,6 +4,8 @@ from turtle import up, update
 from cv2 import line
 import pygame, sys
 
+from game import Game
+
 from pygame.locals import *
 import random, time
 
@@ -92,13 +94,12 @@ class Enemy(pygame.sprite.Sprite):
         
 
     def move(self):
-            global SCORE,HIGH_SCORE
+            global SCORE
             self.rect.move_ip(0,SPEED)
-            if (self.rect.top > (SCREEN_HEIGHT-200)):
+            if (self.rect.top > (SCREEN_HEIGHT-200)) or imagePredict.Proccess==True:
                 SCORE += 1
                 self.rect.top = 0
                 self.rect.center = (random.randint(objwidth,SCREEN_WIDTH-objwidth), 0)
-            
             
  
 class Player(pygame.sprite.Sprite):
@@ -118,7 +119,7 @@ class Player(pygame.sprite.Sprite):
         if self.rect.left > 0:
               if pressed_keys[K_LEFT] or pressed_keys[K_a]:
                   self.rect.move_ip(-10, 0)
-        if self.rect.right < SCREEN_WIDTH-200:        
+        if self.rect.right < SCREEN_WIDTH:        
               if pressed_keys[K_RIGHT] or pressed_keys[K_d]:
                   self.rect.move_ip(10, 0)
                    
@@ -146,6 +147,7 @@ class Background():
       def draw(self):
         DISPLAYSURF.blit(self.bgimage, (self.bgX1, self.bgY1))
         DISPLAYSURF.blit(self.bgimage, (self.bgX2, self.bgY2))
+
         
          
 
@@ -324,25 +326,27 @@ playerDraw=False
 #         # DISPLAYSURF.blit(hinhdothi,(SCREEN_WIDTH/3,0))
         
 #         # fpsclock.tick(FPS)
-gameover=False
+# gameover=False
 
-def GameOver(): 
-    DISPLAYSURF.fill(GREEN)
-    Game_over_label=font.render("YOU FUKING IDIOT!!!",1,RED,BLACK)
-    DISPLAYSURF.blit(Game_over_label,(SCREEN_WIDTH/2 - Game_over_label.get_width()/2, 400))
+# def GameOver(): 
+#     DISPLAYSURF.fill(GREEN)
+#     Game_over_label=font.render("YOU FUKING IDIOT!!!",1,RED,BLACK)
+#     DISPLAYSURF.blit(Game_over_label,(SCREEN_WIDTH/2 - Game_over_label.get_width()/2, 400))
 
-    Restart_label=font.render("PRESS SPACE 2 RESTART" ,1,RED,BLACK)
-    DISPLAYSURF.blit(Restart_label,(SCREEN_WIDTH/2 - Restart_label.get_width()/2, 600))
+#     Restart_label=font.render("PRESS SPACE 2 RESTART" ,1,RED,BLACK)
+#     DISPLAYSURF.blit(Restart_label,(SCREEN_WIDTH/2 - Restart_label.get_width()/2, 600))
     
-    pygame.display.update()
+#     pygame.display.update()
 
 run=True
+
 while run:
+    
     
     #Cycles through all occurring events   
     for event in pygame.event.get():
         if event.type == INC_SPEED:
-              SPEED += 0.5     
+              SPEED += 2     
         if event.type == QUIT:
             run=False
         if pygame.mouse.get_pressed()[0]:
@@ -391,20 +395,24 @@ while run:
         #   pygame.mixer.Sound('crash.wav').play()
         #   time.sleep(0.8)
                     
-        #   DISPLAYSURF.fill(RED)
-        #   DISPLAYSURF.blit(game_over, (30,250))
-        # pygame.display.update()
+        # DISPLAYSURF.fill(RED)
+        # DISPLAYSURF.blit(game_over, (30,250))
+        DISPLAYSURF.fill(GREEN)
+        Game_over_label=font.render("YOU FUKING IDIOT!!!",1,RED,BLACK)
+        DISPLAYSURF.blit(Game_over_label,(SCREEN_WIDTH/2 - Game_over_label.get_width()/2, 400))
+        pygame.display.update()
         
         for entity in all_sprites:
-            # entity.kill()
-            GameOver()
-            time.sleep(1.5)
-            pygame.quit()
-        # sys.exit()  
+                entity.kill()
+            # GameOver()
+        time.sleep(1.5)
+        pygame.quit()
+            # sys.exit()  
    
     DISPLAYSURF.blit(hinhdothi,(SCREEN_WIDTH/3,0))       
     pygame.display.update()
     fpsclock.tick(FPS)
+    
 
 
 # def main_menu():
