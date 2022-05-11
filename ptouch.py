@@ -13,6 +13,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 
+from button import Button
 
 
 # from main import RANK
@@ -37,8 +38,10 @@ YELLOW = (255, 255, 102)
 #
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 800
+SCREEN_W=600
+SCREEN_H=800
 SPEED=5
-LIFE = 11
+LIFE = 13
 GOLD=0
 
 
@@ -50,7 +53,8 @@ objwidth=100
 nv_height=50
 nv_width=50
 
-
+nv_w=100
+nv_h=100
 
 #Setting up Fonts
 font = pygame.font.Font('8-BIT WONDER.TTF', 20)
@@ -61,6 +65,7 @@ font_small = pygame.font.SysFont("Verdana", 20)
  
 #Create a white screen 
 DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
+SCREEN = pygame.display.set_mode((SCREEN_W, SCREEN_H))
 # DISPLAYSURF.fill(WHITE)
 pygame.display.set_caption("ptouch")
 
@@ -90,8 +95,16 @@ BG2=pygame.transform.scale(BG2,(SCREEN_WIDTH,1000))
 GRASS=pygame.image.load('grass.jpg').convert_alpha()
 GRASS=pygame.transform.scale(GRASS,(500,150))
 
-COIN=pygame.image.load('coin.png').convert_alpha()
-COIN=pygame.transform.scale(COIN,(40,40))
+nv1 = pygame.image.load('wizard.png').convert_alpha()
+nv1 = pygame.transform.scale(nv1,(nv_w,nv_h))
+
+nv2 = pygame.image.load('lanternguy.png').convert_alpha()
+nv2 = pygame.transform.scale(nv2,(nv_w,nv_h))
+
+pink=pygame.image.load('pink.jpg').convert_alpha()
+menuimage=pygame.transform.scale(pink,(200,80))
+
+buybutton=pygame.transform.scale(pink,(200,100))
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -106,7 +119,7 @@ class Enemy(pygame.sprite.Sprite):
             global LIFE
             self.rect.move_ip(0,SPEED)
             if (self.rect.bottom >= (SCREEN_HEIGHT-80)):
-                LIFE -= 10
+                LIFE -= 2
                 self.rect.top = 0
                 self.rect.center = (random.randint(objwidth,SCREEN_WIDTH-objwidth), 0)
             if playerDraw:
@@ -135,6 +148,12 @@ class Player(pygame.sprite.Sprite):
         if self.rect.right < SCREEN_WIDTH:        
               if pressed_keys[K_RIGHT] or pressed_keys[K_d]:
                   self.rect.move_ip(10, 0)
+    
+    def draw(self,screen):
+        player_idle=pygame.sprite.Group()
+        player_idle.add(self)
+        player_idle.update(0.5)
+        player_idle.draw(screen)
                    
 class Background():
       def __init__(self):
@@ -171,6 +190,7 @@ class Background():
 #Setting up Sprites        
 P1 = Player()
 E1 = Enemy()
+Player1=Player()
  
 bg = Background()
  
@@ -180,9 +200,7 @@ enemies.add(E1)
 Char = pygame.sprite.Group()
 Char.add(P1)
 
-all_sprites = pygame.sprite.Group()
-all_sprites.add(P1)
-all_sprites.add(E1)
+
 
 
 
@@ -194,20 +212,24 @@ all_sprites.add(E1)
 INC_SPEED = pygame.USEREVENT + 1
 pygame.time.set_timer(INC_SPEED, 1000)
     
-def gameover():
-    # DISPLAYSURF.fill(WHITE)
-    Game_over_label=font.render("GOODLUCK NEXT TIME",1,BLACK)
-    Restart_label=font.render("PRESS SPACE TO RESTART",1,BLACK)
-    DISPLAYSURF.blit(Game_over_label,(SCREEN_WIDTH/2 - Game_over_label.get_width()/2, 400))
-    DISPLAYSURF.blit(Restart_label,(SCREEN_WIDTH/2 - Restart_label.get_width()/2, 500))
-    pygame.display.update()
+# def gameover():
+#     # DISPLAYSURF.fill(WHITE)
+#     Game_over_label=font.render("GOODLUCK NEXT TIME",1,BLACK)
+#     Restart_label=font.render("PRESS SPACE TO RESTART",1,BLACK)
+#     DISPLAYSURF.blit(Game_over_label,(SCREEN_WIDTH/2 - Game_over_label.get_width()/2, 400))
+#     DISPLAYSURF.blit(Restart_label,(SCREEN_WIDTH/2 - Restart_label.get_width()/2, 500))
+#     pygame.display.update()
+
 
 def getHighestScore():
     with open("highest score.txt","r") as f:
         return f.read()
 
+def get_font(size): 
+    return pygame.font.Font("8-BIT WONDER.TTF", size)
+
 playerDraw=False
-def gameloop():
+def play():
     run=True
     global hinhdothi
     global LIFE 
@@ -230,9 +252,6 @@ def gameloop():
                 SPEED += 0.5      
             if event.type == QUIT:
                 run=False
-                pygame.display.quit()
-                pygame.quit()
-                quit()
             # elif event.type == pygame.KEYUP:
             #     if event.key == pygame.K_SPACE:
             #             GameStage()
@@ -281,9 +300,10 @@ def gameloop():
         DISPLAYSURF.blit(HIGHSCORE, (10,30))
     
         #Moves and Re-draws all Sprites
-        for entity in Char:
-            DISPLAYSURF.blit(entity.image, entity.rect)
-            entity.move()
+        Player1.move()
+        # for entity in Char:
+        #     DISPLAYSURF.blit(entity.image, entity.rect)
+        #     entity.move()
         for entity in enemies:
             DISPLAYSURF.blit(entity.image, entity.rect)
             entity.move(W,yDraw,RANK,line,playerDraw)
@@ -300,14 +320,13 @@ def gameloop():
             
             for entity in enemies:
                     # entity.kill()
-                    LIFE=0
+                    LIFE=LIFE - 1 
         if LIFE<=0:
                 # GameOver()
                 # time.sleep(1.5)
                 # pygame.quit()
                 # sys.exit()  
-            run=False
-            break
+            GameOver()
         # if run==False:
         #     LIFE=11
         #     gameover()
@@ -320,32 +339,203 @@ def gameloop():
             # time.sleep(1.5)
             # pygame.quit()
             # sys.exit()
+        Player1.draw(DISPLAYSURF)
         pygame.display.update()
         fpsclock.tick(FPS)
     pygame.quit()
     
-    
 
 
-def GameStage():
-    # title_font = pygame.font.SysFont("comicsans", 70)
-    run = True
-    while run:
-        # DISPLAYSURF.blit(BG, (0,0))
-        DISPLAYSURF.fill(WHITE)
-        title_label = font.render("Press T to begin", 1, BLACK)
-        DISPLAYSURF.blit(title_label, (SCREEN_WIDTH/2 - title_label.get_width()/2, 400))
-        pygame.display.update()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-            # if event.type == pygame.MOUSEBUTTONDOWN:
-            #     gameloop()
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_t:
-                    gameloop()
-    pygame.quit()
+# def GameStage():
+#     # title_font = pygame.font.SysFont("comicsans", 70)
+#     run = True
+#     while run:
+#         # DISPLAYSURF.blit(BG, (0,0))
+#         DISPLAYSURF.fill(WHITE)
+#         title_label = font.render("Press T to begin", 1, BLACK)
+#         DISPLAYSURF.blit(title_label, (SCREEN_WIDTH/2 - title_label.get_width()/2, 400))
+#         pygame.display.update()
+#         for event in pygame.event.get():
+#             if event.type == pygame.QUIT:
+#                 run = False
+#             # if event.type == pygame.MOUSEBUTTONDOWN:
+#             #     gameloop()
+#             if event.type == pygame.KEYUP:
+#                 if event.key == pygame.K_t:
+#                     gameloop()
+#     pygame.quit()
 
 # GameStage()
+
+def store():
+    while True:
+           
+        STORE_MOUSE_POS = pygame.mouse.get_pos()
+     
+        SCREEN.fill(WHITE)
+
+        OPTIONS_TEXT = get_font(20).render("STORE", True, BLACK)
+        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(SCREEN_W/2,100))
+        SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
+
+        OPTIONS_BACK = Button(menuimage, pos=(SCREEN_W/2, SCREEN_H-100), 
+                            text_input="BACK", font=get_font(30), base_color="Black", hovering_color="Green")
+        #make character store                    
+        SCREEN.blit(nv1,(50,200))
+        STORE_BUY_nv1= Button(image=None, pos=(300,250), 
+                            text_input= "WIZAD", font=get_font(30), base_color="Black", hovering_color="Green")
+
+        SCREEN.blit(nv2,(50,350))
+        STORE_BUY_nv2= Button(image=None, pos=(300,400), 
+                            text_input="LANTERN GUY", font=get_font(30), base_color="Black", hovering_color="Green")
+
+        for button in [OPTIONS_BACK,STORE_BUY_nv1,STORE_BUY_nv2]:
+            button.changeColor(STORE_MOUSE_POS)
+            button.update(SCREEN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if OPTIONS_BACK.checkForInput(STORE_MOUSE_POS):
+                    main_menu()
+                elif STORE_BUY_nv2.checkForInput(STORE_MOUSE_POS):
+                    Player1.image= pygame.transform.scale(pygame.image.load('lanternguy.png'),(nv_width,nv_height)).convert_alpha()
+                elif STORE_BUY_nv1.checkForInput(STORE_MOUSE_POS):
+                    Player1.image= pygame.transform.scale(pygame.image.load('wizard.png'),(nv_width,nv_height)).convert_alpha()
+
+        pygame.display.update()
+
+
+def credit():
+    while True:
+           
+        CREDITS_MOUSE_POS = pygame.mouse.get_pos()
+     
+        SCREEN.fill(WHITE)
+
+        OPTIONS_TEXT = get_font(20).render("Credits", True, BLACK)
+        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(SCREEN_W/2, 100))
+        SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
+
+        OPTIONS_BACK = Button(menuimage, pos=(SCREEN_W/2, SCREEN_H-100), 
+                            text_input="BACK", font=get_font(30), base_color="Black", hovering_color="Green")
+
+        CREATER_NHAN = Button(image=None, pos=(SCREEN_W/2, 250), 
+                            text_input="MAKE BY NHAN", font=get_font(40), base_color="Black", hovering_color="Green")
+        CREATER_MINH = Button(image=None, pos=(SCREEN_W/2, 350), 
+                            text_input="MAKE BY MINH", font=get_font(40), base_color="Black", hovering_color="Green")
+        OPTIONS_BACK.changeColor(CREDITS_MOUSE_POS)
+
+
+        OPTIONS_BACK.update(SCREEN)
+        for button in [OPTIONS_BACK,CREATER_NHAN,CREATER_MINH]:
+            button.changeColor(CREDITS_MOUSE_POS)
+            button.update(SCREEN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if OPTIONS_BACK.checkForInput(CREDITS_MOUSE_POS):
+                    main_menu()
+
+        pygame.display.update()
+
+def GameOver():
+    while True:
+        GAME_OVER_MOUSE_POS = pygame.mouse.get_pos()
+
+        SCREEN.fill(WHITE)
+
+        GAME_OVER_TEXT = get_font(20).render("GAME OVER", True, BLACK)
+        GAME_OVER_RECT = GAME_OVER_TEXT.get_rect(center=(SCREEN_W/2, 100))
+        SCREEN.blit(GAME_OVER_TEXT, GAME_OVER_RECT)
+
+        GAME_OVER_BACK = Button(menuimage, pos=(SCREEN_W/2, SCREEN_H-100), 
+                            text_input="BACK", font=get_font(30), base_color="Black", hovering_color="Green")
+
+        GAME_OVER_BACK.update(SCREEN)
+
+        for button in [ GAME_OVER_BACK]:
+            button.changeColor(GAME_OVER_MOUSE_POS)
+            button.update(SCREEN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if GAME_OVER_BACK.checkForInput(GAME_OVER_MOUSE_POS):
+                    global LIFE
+                    LIFE=13
+                    global SPEED
+                    SPEED=5
+                    global RANK
+                    RANK=1
+                    global line
+                    line=[]
+                    global playerDraw
+                    playerDraw=False
+                    global W,yDraw
+                    W,yDraw=generator.CreateGraph(RANK,'dothi.png')
+                    global hinhdothi
+                    dothi=pygame.image.load('dothi.png').convert_alpha()
+                    hinhdothi=pygame.transform.scale(dothi,(100 ,100)).convert_alpha()
+
+                    main_menu()
+
+        pygame.display.update()
+
+
+
+
+def main_menu():
+     while True:
+        SCREEN.fill(WHITE)
+        # SCREEN.blit(the, (40, -140))
+
+        MENU_MOUSE_POS = pygame.mouse.get_pos()
+
+        MENU_TEXT = get_font(70).render("PTOUCH", True,BLACK)
+        MENU_RECT = MENU_TEXT.get_rect(center=(SCREEN_W/2, 100))
+
+        PLAY_BUTTON = Button(menuimage, pos=(SCREEN_W/2, 250), 
+                            text_input="PLAY", font=get_font(30), base_color="#CCFFFF", hovering_color="White")
+        STORE_BUTTON = Button(menuimage, pos=(SCREEN_W/2, 370), 
+                            text_input="STORE", font=get_font(30), base_color="#CCFFFF", hovering_color="White")
+        CREDITS_BUTTON = Button(menuimage, pos=(SCREEN_W/2, 490), 
+                            text_input="CREDITS", font=get_font(30), base_color="#CCFFFF", hovering_color="White")
+        QUIT_BUTTON = Button(menuimage, pos=(SCREEN_W/2, 610), 
+                            text_input="QUIT", font=get_font(30), base_color="#CCFFFF", hovering_color="White")
+
+        SCREEN.blit(MENU_TEXT, MENU_RECT)
+
+        for button in [CREDITS_BUTTON,PLAY_BUTTON, STORE_BUTTON, QUIT_BUTTON]:
+            button.changeColor(MENU_MOUSE_POS)
+            button.update(SCREEN)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # if CREDIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                #    lan()
+                if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    play()
+                if STORE_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    store()
+                if CREDITS_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    credit()   
+                if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    pygame.quit()
+                    sys.exit()
+
+        pygame.display.update()
+
+main_menu()
 
 

@@ -1,51 +1,8 @@
-# import pygame
-# import button
-# from pygame import*
-
-# from ptouch import GameStage
-
-# #create display window
-# SCREEN_HEIGHT = 500
-# SCREEN_WIDTH = 800
-
-# screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-# pygame.display.set_caption('Button Demo')
-
-# #load button images
-# start_img = pygame.image.load('start_btn.png').convert_alpha()
-# exit_img = pygame.image.load('exit_btn.png').convert_alpha()
-
-# #create button instances
-# start_button = button.Button(100, 200, start_img, 0.8)
-# exit_button = button.Button(450, 200, exit_img, 0.8)
-
-# #game loop
-# run = True
-# while run:
-
-# 	screen.fill((202, 228, 241))
-
-# 	if start_button.draw(screen):
-# 		print('START')
-# 	if exit_button.draw(screen):
-# 		print('EXIT')
-
-# 	#event handler
-# 	for event in pygame.event.get():
-# 		#quit game
-# 		if event.type == pygame.QUIT:
-# 			run = False 
-
-# 	pygame.display.update()
-
-# pygame.quit()
-
-
-from ast import Break
+from ast import Break, Global
 from matplotlib import image
 import pygame, sys
 from button import Button
-from pygame import mixer
+from pygame import Surface, mixer
 from ptouch import *
  
 # Setup pygame/window ---------------------------------------- #
@@ -64,12 +21,15 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 YELLOW = (255, 255, 102)
 
+Player1=Player()
+
 SCREEN_W=600
 SCREEN_H=800
 
 nv_w=100
 nv_h=100
 
+LIFE=12
 
 SCREEN = pygame.display.set_mode((SCREEN_W, SCREEN_H))
 
@@ -88,11 +48,7 @@ buybutton=pygame.transform.scale(pink,(200,100))
  
 font = pygame.font.Font('8-BIT WONDER.TTF', 20)
  
-def draw_text(text, font, color, surface, x, y):
-    textobj = font.render(text, 1, color)
-    textrect = textobj.get_rect()
-    textrect.topleft = (x, y)
-    surface.blit(textobj, textrect)
+
 
 def get_font(size): 
     return pygame.font.Font("8-BIT WONDER.TTF", size)
@@ -106,12 +62,15 @@ def play():
     global SPEED
     global W,yDraw
     global RANK
+    
 
     try:
         highestScore = int(getHighestScore())
     except:
         highestScore = 0
-
+    
+    # LIFE=12
+    
     while run:
         #Cycles through all occurring events   
         for event in pygame.event.get():
@@ -134,7 +93,6 @@ def play():
                         # plt.imsave('image.png',pxarray)
                         # pygame.image.save(pxarray,'input.png')
                         PredictResult=imagePredict.Proccess(W,yDraw,RANK,line)
-                        
                         line=[]
                         if PredictResult:
                             RANK+=1
@@ -161,15 +119,16 @@ def play():
             f.write(str(highestScore))
 
         LIFES = font_small.render(f"LIFE: {LIFE}", True, BLACK)
-        DISPLAYSURF.blit(LIFES, (10,10))
+        SCREEN.blit(LIFES, (10,10))
 
         HIGHSCORE = font_small.render(f"HIGHEST SCORE: {highestScore}", True, BLACK)
         DISPLAYSURF.blit(HIGHSCORE, (10,30))
-    
-        #Moves and Re-draws all Sprites
-        for entity in Char:
-            DISPLAYSURF.blit(entity.image, entity.rect)
-            entity.move()
+
+        Player1.move()
+        # #Moves and Re-draws all Sprites
+        # for entity in Char:
+        #     DISPLAYSURF.blit(entity.image, entity.rect)
+        #     entity.move()
         for entity in enemies:
             DISPLAYSURF.blit(entity.image, entity.rect)
             entity.move(W,yDraw,RANK,line,playerDraw)
@@ -178,37 +137,23 @@ def play():
         
         
         #To be run if collision occurs between Player and Enemy
-        if pygame.sprite.spritecollideany(P1,enemies):
+        if pygame.sprite.spritecollideany(Player1,enemies):
             #   pygame.mixer.Sound('crash.wav').play()
             #   time.sleep(0.8)
                         
             # DISPLAYSURF.fill(RED)
             # DISPLAYSURF.blit(game_over, (30,250))
-            
-            
             for entity in enemies:
                     # entity.kill()
-                    LIFE=0
-                    
+                    LIFE=LIFE-1
+                  
         if LIFE<=0:
-                # GameOver()
-                # time.sleep(1.5)
-                # pygame.quit()
-                # sys.exit()  
-            run=False
+            #run=False
             GameOver()
-        # if run==False:
-        #     LIFE=11
-        #     gameover()
-        #     time.sleep(2)
-        #     GameStage()
-            
-        # for event in pygame.event.get():
-            
-            # pygame.display.update()
-            # time.sleep(1.5)
-            # pygame.quit()
-            # sys.exit()
+        
+        
+        
+        Player1.draw(DISPLAYSURF)
         pygame.display.update()
         fpsclock.tick(FPS)
     pygame.quit()
@@ -236,9 +181,6 @@ def store():
         STORE_BUY_nv2= Button(image=None, pos=(300,400), 
                             text_input="LANTERN GUY", font=get_font(30), base_color="Black", hovering_color="Green")
 
-        # OPTIONS_BACK.changeColor(STORE_MOUSE_POS)
-        # OPTIONS_BACK.update(SCREEN)
-        
         for button in [OPTIONS_BACK,STORE_BUY_nv1,STORE_BUY_nv2]:
             button.changeColor(STORE_MOUSE_POS)
             button.update(SCREEN)
@@ -250,8 +192,10 @@ def store():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if OPTIONS_BACK.checkForInput(STORE_MOUSE_POS):
                     main_menu()
-                # elif STORE_BUY_nv2.checkForInput(STORE_MOUSE_POS):
-                #     Player.image=pygame.image.load('lanternguy.png')
+                elif STORE_BUY_nv2.checkForInput(STORE_MOUSE_POS):
+                    Player1.image= pygame.transform.scale(pygame.image.load('lanternguy.png'),(nv_width,nv_height)).convert_alpha()
+                elif STORE_BUY_nv1.checkForInput(STORE_MOUSE_POS):
+                    Player1.image= pygame.transform.scale(pygame.image.load('wizard.png'),(nv_width,nv_height)).convert_alpha()
 
         pygame.display.update()
 
@@ -317,7 +261,8 @@ def GameOver():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if GAME_OVER_BACK.checkForInput(GAME_OVER_MOUSE_POS):
-                    LIFE=11
+                    # global LIFE
+                    # LIFE=13
                     main_menu()
 
         pygame.display.update()
