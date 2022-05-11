@@ -195,12 +195,11 @@ INC_SPEED = pygame.USEREVENT + 1
 pygame.time.set_timer(INC_SPEED, 1000)
     
 def gameover():
-    DISPLAYSURF.fill(WHITE)
+    # DISPLAYSURF.fill(WHITE)
     Game_over_label=font.render("GOODLUCK NEXT TIME",1,BLACK)
     Restart_label=font.render("PRESS SPACE TO RESTART",1,BLACK)
     DISPLAYSURF.blit(Game_over_label,(SCREEN_WIDTH/2 - Game_over_label.get_width()/2, 400))
     DISPLAYSURF.blit(Restart_label,(SCREEN_WIDTH/2 - Restart_label.get_width()/2, 500))
-    game_over=True
     pygame.display.update()
 
 def getHighestScore():
@@ -231,6 +230,9 @@ def gameloop():
                 SPEED += 0.5      
             if event.type == QUIT:
                 run=False
+                pygame.display.quit()
+                pygame.quit()
+                quit()
             # elif event.type == pygame.KEYUP:
             #     if event.key == pygame.K_SPACE:
             #             GameStage()
@@ -304,11 +306,14 @@ def gameloop():
                 # time.sleep(1.5)
                 # pygame.quit()
                 # sys.exit()  
-
-            gameover()
-            run-False
-            time.sleep(3)
-            GameStage()
+            run=False
+            break
+        # if run==False:
+        #     LIFE=11
+        #     gameover()
+        #     time.sleep(2)
+        #     GameStage()
+            
         # for event in pygame.event.get():
             
             # pygame.display.update()
@@ -317,6 +322,7 @@ def gameloop():
             # sys.exit()
         pygame.display.update()
         fpsclock.tick(FPS)
+    pygame.quit()
     
     
 
@@ -340,7 +346,6 @@ def GameStage():
                     gameloop()
     pygame.quit()
 
-GameStage()
+# GameStage()
 
-    
 

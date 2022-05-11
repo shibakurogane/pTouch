@@ -41,6 +41,7 @@
 # pygame.quit()
 
 
+from ast import Break
 from matplotlib import image
 import pygame, sys
 from button import Button
@@ -97,8 +98,121 @@ def get_font(size):
     return pygame.font.Font("8-BIT WONDER.TTF", size)
  
 def play():
-    while True:
-        GameStage()
+    run=True
+    global hinhdothi
+    global LIFE 
+    global line
+    global playerDraw
+    global SPEED
+    global W,yDraw
+    global RANK
+
+    try:
+        highestScore = int(getHighestScore())
+    except:
+        highestScore = 0
+
+    while run:
+        #Cycles through all occurring events   
+        for event in pygame.event.get():
+            if event.type == INC_SPEED:
+                SPEED += 0.5      
+            if event.type == QUIT:
+                run=False
+            # elif event.type == pygame.KEYUP:
+            #     if event.key == pygame.K_SPACE:
+            #             GameStage()
+            if pygame.mouse.get_pressed()[0]:
+                    positionX,positionY=pygame.mouse.get_pos()
+                    line.append((pygame.mouse.get_pos()))
+                    playerDraw=True
+            else:
+                    if playerDraw==True:
+                        playerDraw=False
+                        # pxarray = imagePredict.get_pixel_data(screen,[701,401],[1000,700])
+                        # print(pxarray.shape)
+                        # plt.imsave('image.png',pxarray)
+                        # pygame.image.save(pxarray,'input.png')
+                        PredictResult=imagePredict.Proccess(W,yDraw,RANK,line)
+                        
+                        line=[]
+                        if PredictResult:
+                            RANK+=1
+                            W,yDraw=generator.CreateGraph(RANK,'dothi.png')
+                            dothi=pygame.image.load('dothi.png').convert_alpha()
+                            # obj=pygame.transform.scale(dothi,(objwidth ,objheight)).convert_alpha()
+                            hinhdothi=pygame.transform.scale(dothi,(100 ,100)).convert_alpha()               
+            if event.type ==pygame.KEYDOWN:
+                    if event.key==pygame.K_p:
+                        line=[]
+            # if event.type == pygame.KEYUP:
+            #     if event.key == pygame.K_SPACE and gameover:
+            #         for entity in all_sprites:
+            #             DISPLAYSURF.blit(entity.image, entity.rect)
+            #             entity.move()
+        bg.update()
+        bg.draw()
+        DISPLAYSURF.blit(hinhdothi,(SCREEN_WIDTH/3,0)) 
+        #DISPLAYSURF.blit(background, (0,0))
+
+        if(highestScore < LIFE):
+            highestScore = LIFE
+        with open("highest score.txt","w") as f:
+            f.write(str(highestScore))
+
+        LIFES = font_small.render(f"LIFE: {LIFE}", True, BLACK)
+        DISPLAYSURF.blit(LIFES, (10,10))
+
+        HIGHSCORE = font_small.render(f"HIGHEST SCORE: {highestScore}", True, BLACK)
+        DISPLAYSURF.blit(HIGHSCORE, (10,30))
+    
+        #Moves and Re-draws all Sprites
+        for entity in Char:
+            DISPLAYSURF.blit(entity.image, entity.rect)
+            entity.move()
+        for entity in enemies:
+            DISPLAYSURF.blit(entity.image, entity.rect)
+            entity.move(W,yDraw,RANK,line,playerDraw)
+        for i in range(len(line)):
+                pygame.draw.circle(DISPLAYSURF,BLACK,(line[i][0],line[i][1]),2)
+        
+        
+        #To be run if collision occurs between Player and Enemy
+        if pygame.sprite.spritecollideany(P1,enemies):
+            #   pygame.mixer.Sound('crash.wav').play()
+            #   time.sleep(0.8)
+                        
+            # DISPLAYSURF.fill(RED)
+            # DISPLAYSURF.blit(game_over, (30,250))
+            
+            
+            for entity in enemies:
+                    # entity.kill()
+                    LIFE=0
+                    
+        if LIFE<=0:
+                # GameOver()
+                # time.sleep(1.5)
+                # pygame.quit()
+                # sys.exit()  
+            run=False
+            GameOver()
+        # if run==False:
+        #     LIFE=11
+        #     gameover()
+        #     time.sleep(2)
+        #     GameStage()
+            
+        # for event in pygame.event.get():
+            
+            # pygame.display.update()
+            # time.sleep(1.5)
+            # pygame.quit()
+            # sys.exit()
+        pygame.display.update()
+        fpsclock.tick(FPS)
+    pygame.quit()
+    
  
 def store():
     while True:
@@ -177,7 +291,40 @@ def credit():
                     main_menu()
 
         pygame.display.update()
- 
+
+def GameOver():
+    while True:
+        GAME_OVER_MOUSE_POS = pygame.mouse.get_pos()
+
+        SCREEN.fill(WHITE)
+
+        GAME_OVER_TEXT = get_font(20).render("GAME OVER", True, BLACK)
+        GAME_OVER_RECT = GAME_OVER_TEXT.get_rect(center=(SCREEN_W/2, 100))
+        SCREEN.blit(GAME_OVER_TEXT, GAME_OVER_RECT)
+
+        GAME_OVER_BACK = Button(menuimage, pos=(SCREEN_W/2, SCREEN_H-100), 
+                            text_input="BACK", font=get_font(30), base_color="Black", hovering_color="Green")
+
+        GAME_OVER_BACK.update(SCREEN)
+
+        for button in [ GAME_OVER_BACK]:
+            button.changeColor(GAME_OVER_MOUSE_POS)
+            button.update(SCREEN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if GAME_OVER_BACK.checkForInput(GAME_OVER_MOUSE_POS):
+                    LIFE=11
+                    main_menu()
+
+        pygame.display.update()
+
+
+
+
 def main_menu():
      while True:
         SCREEN.fill(WHITE)
