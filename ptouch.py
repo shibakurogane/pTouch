@@ -1,4 +1,6 @@
 from cProfile import run
+from doctest import FAIL_FAST
+from enum import Flag
 from pickle import GLOBAL
 from turtle import up, update
 from cv2 import line
@@ -24,7 +26,7 @@ from button import Button
 pygame.init()
  
 # FPS 
-FPS = 60
+FPS = 144
 fpsclock = pygame.time.Clock()
  
 # colors
@@ -40,8 +42,8 @@ SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 800
 SCREEN_W=600
 SCREEN_H=800
-SPEED=5
-LIFE = 13
+SPEED=3
+LIFE = 0
 GOLD=0
 
 
@@ -80,7 +82,7 @@ hinhdothi=pygame.transform.scale(dothi,(100 ,100)).convert_alpha()
 obj=pygame.image.load('ppenemy.webp').convert_alpha()
 obj=pygame.transform.scale(obj,(objwidth ,objheight)).convert_alpha()
 
-nv = pygame.image.load('wizard.png').convert_alpha()
+nv = pygame.image.load('hexagont.png').convert_alpha()
 nv = pygame.transform.scale(nv,(nv_width,nv_height))
  
 BG=pygame.image.load('gray3.png').convert_alpha()
@@ -95,7 +97,7 @@ BG2=pygame.transform.scale(BG2,(SCREEN_WIDTH,1000))
 GRASS=pygame.image.load('grass.jpg').convert_alpha()
 GRASS=pygame.transform.scale(GRASS,(500,150))
 
-nv1 = pygame.image.load('wizard.png').convert_alpha()
+nv1 = pygame.image.load('hexagont.png').convert_alpha()
 nv1 = pygame.transform.scale(nv1,(nv_w,nv_h))
 
 nv2 = pygame.image.load('lanternguy.png').convert_alpha()
@@ -113,18 +115,18 @@ class Enemy(pygame.sprite.Sprite):
         self.image = obj
         self.surf = pygame.Surface((objwidth ,objheight))
         self.rect = self.surf.get_rect(center = (random.randint(objwidth,SCREEN_WIDTH-objwidth), 0))
+        self.alive=True
         
 
     def move(self,W,yDraw,RANK,line,playerDraw):
             global LIFE
             self.rect.move_ip(0,SPEED)
-            if (self.rect.bottom >= (SCREEN_HEIGHT-80)):
-                LIFE -= 2
+            if (self.rect.bottom >= (SCREEN_HEIGHT-75)):
+                
                 self.rect.top = 0
-                self.rect.center = (random.randint(objwidth,SCREEN_WIDTH-objwidth), 0)
-            if playerDraw:
-                if imagePredict.Proccess(W,yDraw,RANK,line):
-                    LIFE+=1
+                self.rect.center = (random.randint(objwidth//2,SCREEN_WIDTH-objwidth//2), 0)
+                return True
+            return False            
                 
             
  
@@ -180,9 +182,9 @@ class Background():
       def draw(self):
         DISPLAYSURF.blit(self.bgimage, (self.bgX1, self.bgY1))
         DISPLAYSURF.blit(self.bgimage, (self.bgX2, self.bgY2))
-        DISPLAYSURF.blit(GRASS,(0,SCREEN_HEIGHT-150))
+        # DISPLAYSURF.blit(GRASS,(0,SCREEN_HEIGHT-150))
         # DISPLAYSURF.blit(GRASS,(0,SCREEN_HEIGHT-(150*2)))
-        DISPLAYSURF.blit(GRASS,(SCREEN_WIDTH-500,SCREEN_HEIGHT-150))
+        # DISPLAYSURF.blit(GRASS,(SCREEN_WIDTH-500,SCREEN_HEIGHT-150))
         # DISPLAYSURF.blit(GRASS,(SCREEN_WIDTH-500,SCREEN_HEIGHT-(150*2)))
         
          
@@ -249,7 +251,7 @@ def play():
         #Cycles through all occurring events   
         for event in pygame.event.get():
             if event.type == INC_SPEED:
-                SPEED += 0.5      
+                SPEED += 0.1     
             if event.type == QUIT:
                 run=False
             # elif event.type == pygame.KEYUP:
@@ -270,7 +272,8 @@ def play():
                         
                         line=[]
                         if PredictResult:
-                            RANK+=1
+                            LIFE+=1
+                            RANK=(LIFE+4)//4
                             W,yDraw=generator.CreateGraph(RANK,'dothi.png')
                             dothi=pygame.image.load('dothi.png').convert_alpha()
                             # obj=pygame.transform.scale(dothi,(objwidth ,objheight)).convert_alpha()
@@ -293,7 +296,7 @@ def play():
         with open("highest score.txt","w") as f:
             f.write(str(highestScore))
 
-        LIFES = font_small.render(f"LIFE: {LIFE}", True, BLACK)
+        LIFES = font_small.render(f"SCORE: {LIFE}", True, BLACK)
         DISPLAYSURF.blit(LIFES, (10,10))
 
         HIGHSCORE = font_small.render(f"HIGHEST SCORE: {highestScore}", True, BLACK)
@@ -304,29 +307,41 @@ def play():
         # for entity in Char:
         #     DISPLAYSURF.blit(entity.image, entity.rect)
         #     entity.move()
+        # conclide=False
         for entity in enemies:
             DISPLAYSURF.blit(entity.image, entity.rect)
-            entity.move(W,yDraw,RANK,line,playerDraw)
+            echk=entity.move(W,yDraw,RANK,line,playerDraw)
+            # if echk:
+            #     conclide=True
+        # if conclide:
+        #     LIFE -= 2
+        
         for i in range(len(line)):
                 pygame.draw.circle(DISPLAYSURF,BLACK,(line[i][0],line[i][1]),2)
         #To be run if collision occurs between Player and Enemy
-        if pygame.sprite.spritecollideany(P1,enemies):
-            #   pygame.mixer.Sound('crash.wav').play()
-            #   time.sleep(0.8)
-                        
-            # DISPLAYSURF.fill(RED)
-            # DISPLAYSURF.blit(game_over, (30,250))
+        # print(Player1.rect,'',E1.rect)
+        if pygame.sprite.collide_rect(Player1,E1):
+        #     #   pygame.mixer.Sound('crash.wav').play()
+        #     #   time.sleep(0.8)
             
-            
-            for entity in enemies:
-                    # entity.kill()
-                    LIFE=LIFE - 1 
-        if LIFE<=0:
-                # GameOver()
-                # time.sleep(1.5)
-                # pygame.quit()
-                # sys.exit()  
+            print('collide')
+            run=False
+            E1.rect.top = 0
+            Player1.rect.center=(300, 700)
             GameOver()
+        #     # DISPLAYSURF.fill(RED)
+        #     # DISPLAYSURF.blit(game_over, (30,250))
+            
+            
+        #     # for entity in enemies:
+        #     #         # entity.kill()
+        #     #         LIFE=LIFE - 1 
+        # if LIFE<=0:
+        #         # GameOver()
+        #         # time.sleep(1.5)
+        #         # pygame.quit()
+        #         # sys.exit()  
+        #     GameOver()
         # if run==False:
         #     LIFE=11
         #     gameover()
@@ -366,7 +381,7 @@ def store():
         #make character store                    
         SCREEN.blit(nv1,(50,200))
         STORE_BUY_nv1= Button(image=None, pos=(300,250), 
-                            text_input= "WIZAD", font=get_font(30), base_color="Black", hovering_color="Green")
+                            text_input= "HEXAGON", font=get_font(30), base_color="Black", hovering_color="Green")
 
         SCREEN.blit(nv2,(50,350))
         STORE_BUY_nv2= Button(image=None, pos=(300,400), 
@@ -386,7 +401,7 @@ def store():
                 elif STORE_BUY_nv2.checkForInput(STORE_MOUSE_POS):
                     Player1.image= pygame.transform.scale(pygame.image.load('lanternguy.png'),(nv_width,nv_height)).convert_alpha()
                 elif STORE_BUY_nv1.checkForInput(STORE_MOUSE_POS):
-                    Player1.image= pygame.transform.scale(pygame.image.load('wizard.png'),(nv_width,nv_height)).convert_alpha()
+                    Player1.image= pygame.transform.scale(pygame.image.load('hexagont.png'),(nv_width,nv_height)).convert_alpha()
 
         pygame.display.update()
 
@@ -430,9 +445,7 @@ def credit():
 def GameOver():
     while True:
         GAME_OVER_MOUSE_POS = pygame.mouse.get_pos()
-
         SCREEN.fill(WHITE)
-
         GAME_OVER_TEXT = get_font(20).render("GAME OVER", True, BLACK)
         GAME_OVER_RECT = GAME_OVER_TEXT.get_rect(center=(SCREEN_W/2, 100))
         SCREEN.blit(GAME_OVER_TEXT, GAME_OVER_RECT)
@@ -456,13 +469,13 @@ def GameOver():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if GAME_OVER_BACK.checkForInput(GAME_OVER_MOUSE_POS):
                     global LIFE
-                    LIFE=13
+                    LIFE=0
                     global SPEED
-                    SPEED=5
+                    SPEED=3
                     global RANK
                     RANK=1
-                    global line
                     line=[]
+                    
                     global playerDraw
                     playerDraw=False
                     global W,yDraw
@@ -470,18 +483,17 @@ def GameOver():
                     global hinhdothi
                     dothi=pygame.image.load('dothi.png').convert_alpha()
                     hinhdothi=pygame.transform.scale(dothi,(100 ,100)).convert_alpha()
-
                     main_menu()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if GAME_OVER_AGAIN.checkForInput(GAME_OVER_MOUSE_POS):
                     # global LIFE
-                    LIFE=13
+                    LIFE=0
                     # global SPEED
-                    SPEED=5
+                    SPEED=3
                     # global RANK
                     RANK=1
                     # global line
-                    line=[]
+                    
                     # global playerDraw
                     playerDraw=False
                     # global W,yDraw
