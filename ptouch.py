@@ -346,24 +346,7 @@ def play():
     
 
 
-# def GameStage():
-#     # title_font = pygame.font.SysFont("comicsans", 70)
-#     run = True
-#     while run:
-#         # DISPLAYSURF.blit(BG, (0,0))
-#         DISPLAYSURF.fill(WHITE)
-#         title_label = font.render("Press T to begin", 1, BLACK)
-#         DISPLAYSURF.blit(title_label, (SCREEN_WIDTH/2 - title_label.get_width()/2, 400))
-#         pygame.display.update()
-#         for event in pygame.event.get():
-#             if event.type == pygame.QUIT:
-#                 run = False
-#             # if event.type == pygame.MOUSEBUTTONDOWN:
-#             #     gameloop()
-#             if event.type == pygame.KEYUP:
-#                 if event.key == pygame.K_t:
-#                     gameloop()
-#     pygame.quit()
+
 
 # GameStage()
 
@@ -454,12 +437,15 @@ def GameOver():
         GAME_OVER_RECT = GAME_OVER_TEXT.get_rect(center=(SCREEN_W/2, 100))
         SCREEN.blit(GAME_OVER_TEXT, GAME_OVER_RECT)
 
-        GAME_OVER_BACK = Button(menuimage, pos=(SCREEN_W/2, SCREEN_H-100), 
+        GAME_OVER_BACK = Button(menuimage, pos=(150, SCREEN_H-100), 
                             text_input="BACK", font=get_font(30), base_color="Black", hovering_color="Green")
+
+        GAME_OVER_AGAIN = Button(menuimage, pos=(450, SCREEN_H-100), 
+                            text_input="PLAY AGAIN", font=get_font(30), base_color="Black", hovering_color="Green")
 
         GAME_OVER_BACK.update(SCREEN)
 
-        for button in [ GAME_OVER_BACK]:
+        for button in [ GAME_OVER_BACK,GAME_OVER_AGAIN]:
             button.changeColor(GAME_OVER_MOUSE_POS)
             button.update(SCREEN)
 
@@ -486,6 +472,25 @@ def GameOver():
                     hinhdothi=pygame.transform.scale(dothi,(100 ,100)).convert_alpha()
 
                     main_menu()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if GAME_OVER_AGAIN.checkForInput(GAME_OVER_MOUSE_POS):
+                    # global LIFE
+                    LIFE=13
+                    # global SPEED
+                    SPEED=5
+                    # global RANK
+                    RANK=1
+                    # global line
+                    line=[]
+                    # global playerDraw
+                    playerDraw=False
+                    # global W,yDraw
+                    W,yDraw=generator.CreateGraph(RANK,'dothi.png')
+                    # global hinhdothi
+                    dothi=pygame.image.load('dothi.png').convert_alpha()
+                    hinhdothi=pygame.transform.scale(dothi,(100 ,100)).convert_alpha()
+
+                    play()
 
         pygame.display.update()
 
