@@ -38,7 +38,7 @@ font1 = pygame.font.Font('freesansbold.ttf',30)
 text1 = font1.render('Minh',True,Navy,Teal)
 
 #load image
-img = pygame.image.load('wizard.png')
+img = pygame.image.load('hexagont.png').convert_alpha()
 img1 = pygame.transform.scale(img,(25,25))
 
 imgx=10
