@@ -118,7 +118,7 @@ class Enemy(pygame.sprite.Sprite):
     def move(self,W,yDraw,RANK,line,playerDraw):
             global LIFE
             self.rect.move_ip(0,SPEED)
-            if (self.rect.bottom >= (SCREEN_HEIGHT-80)):
+            if (self.rect.bottom >= (SCREEN_HEIGHT-100)):
                 LIFE -= 2
                 self.rect.top = 0
                 self.rect.center = (random.randint(objwidth,SCREEN_WIDTH-objwidth), 0)
