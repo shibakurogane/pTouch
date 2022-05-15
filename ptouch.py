@@ -44,8 +44,8 @@ SCREEN_W=600
 SCREEN_H=800
 SPEED=3
 LIFE = 0
-GOLD=0
 
+playerCoin=0
 
 line=[]
 
@@ -79,7 +79,7 @@ W,yDraw=generator.CreateGraph(RANK,'dothi.png')
 dothi=pygame.image.load('dothi.png').convert_alpha()
 hinhdothi=pygame.transform.scale(dothi,(100 ,100)).convert_alpha()
 
-obj=pygame.image.load('ppenemy.webp').convert_alpha()
+obj=pygame.image.load('image/bigdrill_3.png').convert_alpha()
 obj=pygame.transform.scale(obj,(objwidth ,objheight)).convert_alpha()
 
 nv = pygame.image.load('hexagont.png').convert_alpha()
@@ -100,8 +100,21 @@ GRASS=pygame.transform.scale(GRASS,(500,150))
 nv1 = pygame.image.load('hexagont.png').convert_alpha()
 nv1 = pygame.transform.scale(nv1,(nv_w,nv_h))
 
-nv2 = pygame.image.load('lanternguy.png').convert_alpha()
+nv2 = pygame.image.load('image/cityball.png').convert_alpha()
 nv2 = pygame.transform.scale(nv2,(nv_w,nv_h))
+
+nv3 = pygame.image.load('image/metal_ball.png').convert_alpha()
+nv3 = pygame.transform.scale(nv3,(nv_w,nv_h))
+
+nv4 = pygame.image.load('image/earthball.png').convert_alpha()
+nv4 = pygame.transform.scale(nv4,(nv_w,nv_h))
+
+nv5 = pygame.image.load('image/knifeball.png').convert_alpha()
+nv5 = pygame.transform.scale(nv5,(nv_w,nv_h))
+
+nv6 = pygame.image.load('image/ppball.png').convert_alpha()
+nv6 = pygame.transform.scale(nv6,(nv_w,nv_h))
+
 
 pink=pygame.image.load('pink.jpg').convert_alpha()
 menuimage=pygame.transform.scale(pink,(200,80))
@@ -227,6 +240,10 @@ def getHighestScore():
     with open("highest score.txt","r") as f:
         return f.read()
 
+def Coin():
+    with open("coin.txt","r") as f:
+        return f.read()
+
 def get_font(size): 
     return pygame.font.Font("8-BIT WONDER.TTF", size)
 
@@ -245,6 +262,8 @@ def play():
         highestScore = int(getHighestScore())
     except:
         highestScore = 0
+
+    
 
     while run:
             # entity.move()
@@ -315,9 +334,11 @@ def play():
             #     conclide=True
         # if conclide:
         #     LIFE -= 2
-        
-        for i in range(len(line)):
-                pygame.draw.circle(DISPLAYSURF,BLACK,(line[i][0],line[i][1]),2)
+        if len(line)>1:
+            for i in range(1,len(line)):
+                pygame.draw.line(DISPLAYSURF,GREEN,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),7)
+                pygame.draw.line(DISPLAYSURF,BLACK,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),5)
+                # pygame.draw.line(DISPLAYSURF,WHITE,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),3)
         #To be run if collision occurs between Player and Enemy
         # print(Player1.rect,'',E1.rect)
         if pygame.sprite.collide_rect(Player1,E1):
@@ -328,7 +349,8 @@ def play():
             run=False
             E1.rect.top = 0
             Player1.rect.center=(300, 700)
-            GameOver()
+            line=[]
+            GameOver(LIFE)
         #     # DISPLAYSURF.fill(RED)
         #     # DISPLAYSURF.blit(game_over, (30,250))
             
@@ -364,32 +386,128 @@ def play():
 
 
 # GameStage()
+def items(screen,nv,ImgPosition,textPosition,text,bColor="Black",hColor="Green"):
+    SCREEN.blit(nv,ImgPosition)
+    STORE_BUY= Button(image=None, pos=textPosition, text_input= text, font=get_font(30), base_color=bColor, hovering_color=hColor)
+    return STORE_BUY
 
-def store():
+def Buyitems(screen,textPosition,text,bColor="Gray",hColor="Green"):
+    STORE_BUY= Button(image=None, pos=textPosition, text_input= text, font=get_font(30), base_color=bColor, hovering_color=hColor)
+    return STORE_BUY
+
+def Delete_Buyitems(screen,textPosition,text,bColor="Gray",hColor="Green"):
+    STORE_BUY= Button(image=None, pos=None, text_input= None, font=get_font(30), base_color=bColor, hovering_color=hColor)
+    return STORE_BUY
+
+def store_1():
+    playerCoi=addCoin()
     while True:
            
         STORE_MOUSE_POS = pygame.mouse.get_pos()
      
         SCREEN.fill(WHITE)
 
-        OPTIONS_TEXT = get_font(20).render("STORE", True, BLACK)
+        OPTIONS_TEXT = get_font(20).render("STORE 1", True, BLACK)
         OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(SCREEN_W/2,100))
         SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
-        OPTIONS_BACK = Button(menuimage, pos=(SCREEN_W/2, SCREEN_H-100), 
+        OPTIONS_BACK = Button(menuimage, pos=(100, SCREEN_H-100), 
                             text_input="BACK", font=get_font(30), base_color="Black", hovering_color="Green")
+
+        OPTIONS_MENU = Button(menuimage, pos=(300, SCREEN_H-100), 
+                            text_input="MENU", font=get_font(30), base_color="Black", hovering_color="Green")
+
+        OPTIONS_NEXT = Button(menuimage, pos=(500, SCREEN_H-100), 
+                            text_input="NEXT", font=get_font(30), base_color="Black", hovering_color="Green")
+
+        
         #make character store                    
-        SCREEN.blit(nv1,(50,200))
-        STORE_BUY_nv1= Button(image=None, pos=(300,250), 
-                            text_input= "HEXAGON", font=get_font(30), base_color="Black", hovering_color="Green")
+        STORE_BUY_nv1=items(SCREEN,nv1,(50,200),(300,250),'HEXAGON')
+        STORE_BUY_BUTTON_nv1=Buyitems(SCREEN,(520,250),'100')
+        
+        STORE_BUY_nv2= items(SCREEN,nv2,(50,350),(300,400),'CITY BALL')
+        STORE_BUY_BUTTON_nv2=Buyitems(SCREEN,(520,400),'100')
+        
+        STORE_BUY_nv3= items(SCREEN,nv3,(50,500),(300,550),'METAL BALL')
+        STORE_BUY_BUTTON_nv3=Buyitems(SCREEN,(520,550),'100')
 
-        SCREEN.blit(nv2,(50,350))
-        STORE_BUY_nv2= Button(image=None, pos=(300,400), 
-                            text_input="LANTERN GUY", font=get_font(30), base_color="Black", hovering_color="Green")
-
-        for button in [OPTIONS_BACK,STORE_BUY_nv1,STORE_BUY_nv2]:
+        for button in [OPTIONS_BACK,STORE_BUY_nv1,STORE_BUY_nv2,STORE_BUY_nv3,OPTIONS_MENU,OPTIONS_NEXT, STORE_BUY_BUTTON_nv1,
+        STORE_BUY_BUTTON_nv2,STORE_BUY_BUTTON_nv3]:
             button.changeColor(STORE_MOUSE_POS)
             button.update(SCREEN)
+
+        COINS = font.render(f"COIN {playerCoi}", True, BLACK)
+        DISPLAYSURF.blit(COINS, (10,92))
+
+        with open("coin.txt","w") as f:
+            f.write(str(playerCoi))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONUP:
+                if OPTIONS_BACK.checkForInput(STORE_MOUSE_POS):
+                    main_menu()
+                if OPTIONS_MENU.checkForInput(STORE_MOUSE_POS):
+                    main_menu()
+                if OPTIONS_NEXT.checkForInput(STORE_MOUSE_POS):
+                    store_2()
+                if playerCoi>=100 and STORE_BUY_BUTTON_nv2.checkForInput(STORE_MOUSE_POS):
+                    playerCoi=playerCoi-100
+
+       
+
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if STORE_BUY_nv2.checkForInput(STORE_MOUSE_POS):
+                    Player1.image= pygame.transform.scale(pygame.image.load('image/cityball.png'),(nv_width,nv_height)).convert_alpha()
+                elif STORE_BUY_nv1.checkForInput(STORE_MOUSE_POS):
+                    Player1.image= pygame.transform.scale(pygame.image.load('hexagont.png'),(nv_width,nv_height)).convert_alpha()
+                elif STORE_BUY_nv3.checkForInput(STORE_MOUSE_POS):
+                    Player1.image= pygame.transform.scale(pygame.image.load('image/metal_ball.png'),(nv_width,nv_height)).convert_alpha()
+        
+
+        pygame.display.update()
+
+def store_2():
+    playerCoi=addCoin()
+    while True:
+           
+        STORE_MOUSE_POS = pygame.mouse.get_pos()
+     
+        SCREEN.fill(WHITE)
+
+        OPTIONS_TEXT = get_font(20).render("STORE 2", True, BLACK)
+        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(SCREEN_W/2,100))
+        SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
+
+        OPTIONS_BACK = Button(menuimage, pos=(100, SCREEN_H-100), 
+                            text_input="BACK", font=get_font(30), base_color="Black", hovering_color="Green")
+
+        OPTIONS_MENU = Button(menuimage, pos=(300, SCREEN_H-100), 
+                            text_input="MENU", font=get_font(30), base_color="Black", hovering_color="Green")
+
+        OPTIONS_NEXT = Button(menuimage, pos=(500, SCREEN_H-100), 
+                            text_input="NEXT", font=get_font(30), base_color="Black", hovering_color="Green")
+        #make character store                    
+    
+        STORE_BUY_nv4= items(SCREEN,nv4,(50,200),(300,250),'EARTH BALL')
+        STORE_BUY_BUTTON_nv4=Buyitems(SCREEN,(520,250),'BUY')
+
+        STORE_BUY_nv5= items(SCREEN,nv5,(50,350),(300,400),'KNIFE BALL')
+        STORE_BUY_BUTTON_nv5=Buyitems(SCREEN,(520,400),'BUY')
+
+        STORE_BUY_nv6= items(SCREEN,nv6,(50,500),(300,550),'PUPLE BALL')
+        STORE_BUY_BUTTON_nv6=Buyitems(SCREEN,(520,550),'BUY')
+
+        for button in [OPTIONS_BACK,STORE_BUY_nv4,STORE_BUY_nv5,STORE_BUY_nv6,OPTIONS_MENU,OPTIONS_NEXT, 
+        STORE_BUY_BUTTON_nv4, STORE_BUY_BUTTON_nv5, STORE_BUY_BUTTON_nv6]:
+            button.changeColor(STORE_MOUSE_POS)
+            button.update(SCREEN)
+
+        COINS = font.render(f"COIN {playerCoi}", True, BLACK)
+        DISPLAYSURF.blit(COINS, (10,92))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -397,11 +515,17 @@ def store():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if OPTIONS_BACK.checkForInput(STORE_MOUSE_POS):
+                    store_1()
+                if OPTIONS_MENU.checkForInput(STORE_MOUSE_POS):
                     main_menu()
-                elif STORE_BUY_nv2.checkForInput(STORE_MOUSE_POS):
-                    Player1.image= pygame.transform.scale(pygame.image.load('lanternguy.png'),(nv_width,nv_height)).convert_alpha()
-                elif STORE_BUY_nv1.checkForInput(STORE_MOUSE_POS):
-                    Player1.image= pygame.transform.scale(pygame.image.load('hexagont.png'),(nv_width,nv_height)).convert_alpha()
+
+                elif STORE_BUY_nv4.checkForInput(STORE_MOUSE_POS):
+                    Player1.image= pygame.transform.scale(pygame.image.load('image/earthball.png'),(nv_width,nv_height)).convert_alpha()
+                elif STORE_BUY_nv5.checkForInput(STORE_MOUSE_POS):
+                    Player1.image= pygame.transform.scale(pygame.image.load('image/knifeball.png'),(nv_width,nv_height)).convert_alpha()
+                elif STORE_BUY_nv6.checkForInput(STORE_MOUSE_POS):
+                    Player1.image= pygame.transform.scale(pygame.image.load('image/ppball.png'),(nv_width,nv_height)).convert_alpha()
+
 
         pygame.display.update()
 
@@ -424,6 +548,7 @@ def credit():
                             text_input="MAKE BY NHAN", font=get_font(40), base_color="Black", hovering_color="Green")
         CREATER_MINH = Button(image=None, pos=(SCREEN_W/2, 350), 
                             text_input="MAKE BY MINH", font=get_font(40), base_color="Black", hovering_color="Green")
+
         OPTIONS_BACK.changeColor(CREDITS_MOUSE_POS)
 
 
@@ -441,8 +566,18 @@ def credit():
                     main_menu()
 
         pygame.display.update()
-
-def GameOver():
+def addCoin(point=0):
+    try:
+        playerCoin = int(Coin())
+    except:
+        playerCoin = 0
+    playerCoin+=point
+    with open("coin.txt","w") as f:
+            f.write(str(playerCoin))
+    return playerCoin
+def GameOver(point):
+    addCoin(point)
+    
     while True:
         GAME_OVER_MOUSE_POS = pygame.mouse.get_pos()
         SCREEN.fill(WHITE)
@@ -450,15 +585,15 @@ def GameOver():
         GAME_OVER_RECT = GAME_OVER_TEXT.get_rect(center=(SCREEN_W/2, 100))
         SCREEN.blit(GAME_OVER_TEXT, GAME_OVER_RECT)
 
-        GAME_OVER_BACK = Button(menuimage, pos=(150, SCREEN_H-100), 
+        GAME_OVER_BACK = Button(image=None, pos=(150, SCREEN_H-100), 
                             text_input="BACK", font=get_font(30), base_color="Black", hovering_color="Green")
 
-        GAME_OVER_AGAIN = Button(menuimage, pos=(450, SCREEN_H-100), 
+        GAME_OVER_AGAIN = Button(image=None, pos=(450, SCREEN_H-100), 
                             text_input="PLAY AGAIN", font=get_font(30), base_color="Black", hovering_color="Green")
 
         GAME_OVER_BACK.update(SCREEN)
 
-        for button in [ GAME_OVER_BACK,GAME_OVER_AGAIN]:
+        for button in [GAME_OVER_BACK,GAME_OVER_AGAIN]:
             button.changeColor(GAME_OVER_MOUSE_POS)
             button.update(SCREEN)
 
@@ -510,7 +645,8 @@ def GameOver():
 
 
 def main_menu():
-     while True:
+    
+    while True:
         SCREEN.fill(WHITE)
         # SCREEN.blit(the, (40, -140))
 
@@ -534,6 +670,7 @@ def main_menu():
             button.changeColor(MENU_MOUSE_POS)
             button.update(SCREEN)
         
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -544,7 +681,7 @@ def main_menu():
                 if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
                     play()
                 if STORE_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    store()
+                    store_1()
                 if CREDITS_BUTTON.checkForInput(MENU_MOUSE_POS):
                     credit()   
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
