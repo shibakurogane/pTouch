@@ -425,13 +425,14 @@ def ShopID():
 
 def store_1():
     playerCoi=addCoin()
+
     ITEMS=['HEXAGON','CITYBALL','METALBALL']
     with open('ID.txt', 'r') as file:
         data = file.readlines()
     SELECTED=data[2][9:]
     SELECTED=list(map(int,SELECTED.split(',')))
     BOUGHT=data[20:23]
-
+    CHECK=data[22][17:]
     print(SELECTED)
     while True:
         
@@ -450,11 +451,12 @@ def store_1():
                 SCREEN.blit(OPTEXT,(XC+20,YC))
             
         pygame.draw.rect(SCREEN,'Gray', pygame.Rect(SELECTED[0],SELECTED[1],SELECTED[2],SELECTED[3]))
+
         OPTIONS_TEXT = get_font(20).render("STORE 1", True, BLACK)
         OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(SCREEN_W/2,100))
         SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
-        OPTIONS_BACK = Button(menuimage, pos=(100, SCREEN_H-100), 
+        OPTIONS_BACK_MENU = Button(menuimage, pos=(100, SCREEN_H-100), 
                             text_input="BACK", font=get_font(30), base_color="Black", hovering_color="Green")
 
         OPTIONS_MENU = Button(menuimage, pos=(300, SCREEN_H-100), 
@@ -469,19 +471,13 @@ def store_1():
         # STORE_BUY_BUTTON_nv1=Buyitems(SCREEN,(520,250),'100')
         
         STORE_BUY_nv2= items(SCREEN,nv2,(50,350),(300,400),ITEMS[1])
-        # with open('ID.txt','r')as f:
-        #     data=f.readline()
-        #     if data==3:
-        #             STORE_BUY_BUTTON_nv2=Buyitems(SCREEN,(520,400),'100')
-        #             for button in [STORE_BUY_BUTTON_nv2]:
-        #                 button.changeColor(STORE_MOUSE_POS)
-        #                 button.update(SCREEN)
+        
         # STORE_BUY_BUTTON_nv2=Buyitems(SCREEN,(520,400),'100')
 
         STORE_BUY_nv3= items(SCREEN,nv3,(50,500),(300,550),ITEMS[2])
         # STORE_BUY_BUTTON_nv3=Buyitems(SCREEN,(520,550),'100')
 
-        for button in [OPTIONS_BACK,OPTIONS_MENU,OPTIONS_NEXT,STORE_BUY_nv1,STORE_BUY_nv2,STORE_BUY_nv3]:
+        for button in [OPTIONS_BACK_MENU,OPTIONS_MENU,OPTIONS_NEXT,STORE_BUY_nv1,STORE_BUY_nv2,STORE_BUY_nv3]:
             button.changeColor(STORE_MOUSE_POS)
             button.update(SCREEN)
 
@@ -491,44 +487,56 @@ def store_1():
 
         with open("coin.txt","w") as f:
             f.write(str(playerCoi))
-        ShopID()
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.MOUSEBUTTONUP:
-                if OPTIONS_BACK.checkForInput(STORE_MOUSE_POS):
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if OPTIONS_BACK_MENU.checkForInput(STORE_MOUSE_POS):
                     main_menu()
                 if OPTIONS_MENU.checkForInput(STORE_MOUSE_POS):
                     main_menu()
                 if OPTIONS_NEXT.checkForInput(STORE_MOUSE_POS):
                     store_2()
-                if playerCoi>=100 and STORE_BUY_nv2.checkForInput(STORE_MOUSE_POS):
+                if STORE_BUY_nv2.checkForInput(STORE_MOUSE_POS):
+                    if playerCoi>=100:
+                        playerCoi+=-100
+                        temp=data[21]
+                        temp=temp.split()
+                        temp[3]='OWNED\n'
+                        st=" ".join(temp)
+                        data[21]=st
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+                        SELECTED=data[2][9:]
+                        SELECTED=list(map(int,SELECTED.split(',')))
+                        BOUGHT=data[20:23]
+                        
+                    if CHECK=='OWNED' and STORE_BUY_nv2.checkForInput(STORE_MOUSE_POS):
+                        playerCoi+=100
+                        print(1111)
+                        Player1.image= pygame.transform.scale(pygame.image.load('image/cityball.png'),(nv_width,nv_height)).convert_alpha() 
+                if playerCoi>=100 and STORE_BUY_nv3.checkForInput(STORE_MOUSE_POS):
+                    
                     playerCoi+=-100
-                    temp=data[21]
+                    temp=data[22]
                     temp=temp.split()
                     temp[3]='OWNED\n'
                     st=" ".join(temp)
-                    data[21]=st
+                    data[22]=st
                     with open("ID.txt","w") as f:
                         f.write(listToString(data))
                     SELECTED=data[2][9:]
                     SELECTED=list(map(int,SELECTED.split(',')))
                     BOUGHT=data[20:23]
-                    Player1.image= pygame.transform.scale(pygame.image.load('image/cityball.png'),(nv_width,nv_height)).convert_alpha() 
-                if playerCoi>=100 and STORE_BUY_nv3.checkForInput(STORE_MOUSE_POS):
-                    
-                    playerCoi+=-100
-                    # with open("ID.txt","a") as f:
-                    #     f.write('\n3')
-                    #     print(3)
                     Player1.image= pygame.transform.scale(pygame.image.load('image/metal_ball.png'),(nv_width,nv_height)).convert_alpha()
 
         pygame.display.update()
 
 def store_2():
     playerCoi=addCoin()
-    ITEMS=['HEXAGON','CITYBALL','METALBALL']
+    ITEMS=['EARTH BALL','KNIFE BALL','PUPLE BALL']
     with open('ID.txt', 'r') as file:
         data = file.readlines()
     SELECTED=data[2][9:]
@@ -572,7 +580,7 @@ def store_2():
         STORE_BUY_nv6= items(SCREEN,nv6,(50,500),(300,550),'PUPLE BALL')
         # STORE_BUY_BUTTON_nv6=Buyitems(SCREEN,(520,550),'BUY')
 
-        for button in [OPTIONS_BACK,STORE_BUY_nv4,STORE_BUY_nv5,STORE_BUY_nv6,OPTIONS_MENU,OPTIONS_NEXT]:
+        for button in [OPTIONS_BACK,OPTIONS_MENU,OPTIONS_NEXT,STORE_BUY_nv4,STORE_BUY_nv5,STORE_BUY_nv6]:
             button.changeColor(STORE_MOUSE_POS)
             button.update(SCREEN)
 
@@ -590,12 +598,50 @@ def store_2():
                 if OPTIONS_MENU.checkForInput(STORE_MOUSE_POS):
                     main_menu()
 
-                elif STORE_BUY_nv4.checkForInput(STORE_MOUSE_POS):
+                if playerCoi>=100 and STORE_BUY_nv4.checkForInput(STORE_MOUSE_POS):
+                    playerCoi+=-100
+                    temp=data[30]
+                    temp=temp.split()
+                    temp[3]='OWNED\n'
+                    st=" ".join(temp)
+                    data[30]=st
+                    with open("ID.txt","w") as f:
+                        f.write(listToString(data))
+                    SELECTED=data[2][9:]
+                    SELECTED=list(map(int,SELECTED.split(',')))
+                    BOUGHT=data[30:33]
                     Player1.image= pygame.transform.scale(pygame.image.load('image/earthball.png'),(nv_width,nv_height)).convert_alpha()
-                elif STORE_BUY_nv5.checkForInput(STORE_MOUSE_POS):
+
+                if playerCoi>=100 and STORE_BUY_nv5.checkForInput(STORE_MOUSE_POS):
+                    playerCoi+=-100
+                    temp=data[31]
+                    temp=temp.split()
+                    temp[3]='OWNED\n'
+                    st=" ".join(temp)
+                    data[31]=st
+                    with open("ID.txt","w") as f:
+                        f.write(listToString(data))
+                    SELECTED=data[2][9:]
+                    SELECTED=list(map(int,SELECTED.split(',')))
+                    BOUGHT=data[30:33]
                     Player1.image= pygame.transform.scale(pygame.image.load('image/knifeball.png'),(nv_width,nv_height)).convert_alpha()
-                elif STORE_BUY_nv6.checkForInput(STORE_MOUSE_POS):
+
+                if playerCoi>=100 and STORE_BUY_nv6.checkForInput(STORE_MOUSE_POS):
+                    playerCoi+=-100
+                    temp=data[32]
+                    temp=temp.split()
+                    temp[3]='OWNED\n'
+                    st=" ".join(temp)
+                    data[32]=st
+                    with open("ID.txt","w") as f:
+                        f.write(listToString(data))
+                    SELECTED=data[2][9:]
+                    SELECTED=list(map(int,SELECTED.split(',')))
+                    BOUGHT=data[30:33]
                     Player1.image= pygame.transform.scale(pygame.image.load('image/ppball.png'),(nv_width,nv_height)).convert_alpha()
+                 
+
+                
 
 
         pygame.display.update()
