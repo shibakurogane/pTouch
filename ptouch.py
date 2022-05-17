@@ -45,6 +45,15 @@ GREEN = (0, 255, 0)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 YELLOW = (255, 255, 102)
+AQUA	=	(0,255,255)
+MAGENTA =	(255,0,255)
+SILVER	=	(192,192,192)
+GRAY	=	(128,128,128)
+MAROON	=	(128,0,0)
+OLIVE	=	(128,128,0)
+PURPLE	=	(128,0,128)
+TEAL	=	(0,128,128)
+NAVY	=	(0,0,128)
  
 #
 SCREEN_WIDTH = 600
@@ -261,6 +270,10 @@ def Coin():
 def get_font(size): 
     return pygame.font.Font("8-BIT WONDER.TTF", size)
 
+def ShopID():
+    with open("ID.txt","r") as f:
+        return f.read()
+
 playerDraw=False
 def play():
     run=True
@@ -348,10 +361,15 @@ def play():
             #     conclide=True
         # if conclide:
         #     LIFE -= 2
+        with open('ID.txt', 'r') as file:
+            data = file.readlines()
+        SELECTED=data[10][9:]
+        SELECTED=list(SELECTED.split())
+
         if len(line)>1:
-            for i in range(1,len(line)):
-                pygame.draw.line(DISPLAYSURF,GREEN,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),7)
-                pygame.draw.line(DISPLAYSURF,BLACK,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),5)
+            for i in range(1,len(line)):  
+                pygame.draw.line(DISPLAYSURF,SELECTED[0],(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),7)
+                # pygame.draw.line(DISPLAYSURF,BLACK,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),5)
                 # pygame.draw.line(DISPLAYSURF,WHITE,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),3)
         #To be run if collision occurs between Player and Enemy
         # print(Player1.rect,'',E1.rect)
@@ -420,23 +438,408 @@ def Buyitems(screen,textPosition,text,bColor="Gray",hColor="Green"):
     return STORE_BUY
 
 
-def ShopID():
-    with open("ID.txt","r") as f:
-        return f.read()
+
+
+def shop():
+    while True:
+        SCREEN.fill(WHITE)
+        #SCREEN.blit(the, (40, -140))
+
+        MENU_MOUSE_POS = pygame.mouse.get_pos()
+
+        SHOP_TEXT = get_font(30).render("shop", True,BLACK)
+        SHOP_RECT = SHOP_TEXT.get_rect(center=(SCREEN_W/2, 100))
+
+        SHOP_BALL_BUTTON = Button(menuimage, pos=(SCREEN_W/2, 250), 
+                            text_input="BALL", font=get_font(30), base_color="#CCFFFF", hovering_color="White")
+        SHOP_LINE_BUTTON = Button(menuimage, pos=(SCREEN_W/2, 370), 
+                            text_input="LINE", font=get_font(30), base_color="#CCFFFF", hovering_color="White")
+        SHOP_BACK_BUTTON = Button(menuimage, pos=(SCREEN_W/2, SCREEN_H-100), 
+                            text_input="BACK", font=get_font(30), base_color="#CCFFFF", hovering_color="White")
+
+        SCREEN.blit(SHOP_TEXT, SHOP_RECT)
+
+        for button in [SHOP_BALL_BUTTON, SHOP_LINE_BUTTON,SHOP_BACK_BUTTON]:
+            button.changeColor(MENU_MOUSE_POS)
+            button.update(SCREEN)
+        
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # if CREDIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                #    lan()
+                if SHOP_BALL_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    store_1()
+                if SHOP_LINE_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    store_line_1()
+                if SHOP_BACK_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    main_menu()   
+
+        pygame.display.update()
+def store_line_1():
+    playerCoi=addCoin()
+    ITEMS=['GREEN','BLACK','YELLOW']
+    while True:
+        
+        with open('ID.txt', 'r') as file:
+            data = file.readlines()
+        SELECTED=data[6][9:]
+        SELECTED=list(map(int,SELECTED.split()))
+        # SELECTEDLINE=data[10][9:]
+        # SELECTEDLINE=list(SELECTEDLINE.split())
+        BOUGHT=data[35:38]
+        # print(SELECTED)
+        STORE_MOUSE_POS = pygame.mouse.get_pos()
+     
+        SCREEN.fill(WHITE)
+        for i in BOUGHT:
+            XC=int(i.split()[1])
+            YC=int(i.split()[2])
+            if(i.split()[3]=='OWNED'):
+                OPTEXT = get_font(20).render("OWNED", True,'Gray')
+                SCREEN.blit(OPTEXT,(XC,YC))
+            else: 
+                OPTEXT = get_font(20).render("1000", True,'Gray')
+                SCREEN.blit(OPTEXT,(XC+20,YC))
+        
+        pygame.draw.rect(SCREEN,'Gray', pygame.Rect(SELECTED[0],SELECTED[1],SELECTED[2],SELECTED[3]))
+    
+        OPTIONS_TEXT = get_font(20).render("LINE COLOR", True, BLACK)
+        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(SCREEN_W/2,100))
+        SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
+
+        OPTIONS_BACK_MENU = Button(menuimage, pos=(100, SCREEN_H-100), 
+                            text_input="BACK", font=get_font(30), base_color="Black", hovering_color="Green")
+
+        OPTIONS_MENU = Button(menuimage, pos=(300, SCREEN_H-100), 
+                            text_input="MENU", font=get_font(30), base_color="Black", hovering_color="Green")
+
+        OPTIONS_NEXT = Button(menuimage, pos=(500, SCREEN_H-100), 
+                            text_input="NEXT", font=get_font(30), base_color="Black", hovering_color="Green")
+
+        
+        #make character store                    
+        STORE_BUY_line1=items(SCREEN,nv1,(50,200),(300,250),ITEMS[0])
+        # STORE_BUY_BUTTON_nv1=Buyitems(SCREEN,(520,250),'100')
+        
+        STORE_BUY_line2= items(SCREEN,nv2,(50,350),(300,400),ITEMS[1])
+        
+        # STORE_BUY_BUTTON_nv2=Buyitems(SCREEN,(520,400),'100')
+
+        STORE_BUY_line3= items(SCREEN,nv3,(50,500),(300,550),ITEMS[2])
+        # STORE_BUY_BUTTON_nv3=Buyitems(SCREEN,(520,550),'100')
+
+        for button in [OPTIONS_BACK_MENU,OPTIONS_MENU,OPTIONS_NEXT,STORE_BUY_line1,STORE_BUY_line2,STORE_BUY_line3]:
+            button.changeColor(STORE_MOUSE_POS)
+            button.update(SCREEN)
+
+        COINS = font.render(f"{playerCoi}", True, BLACK)
+        SCREEN.blit(COINS, (70,91))
+        SCREEN.blit(coin,(5,80))
+
+        with open("coin.txt","w") as f:
+            f.write(str(playerCoi))
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if OPTIONS_BACK_MENU.checkForInput(STORE_MOUSE_POS):
+                    main_menu()
+                if OPTIONS_MENU.checkForInput(STORE_MOUSE_POS):
+                    main_menu()
+                if OPTIONS_NEXT.checkForInput(STORE_MOUSE_POS):
+                    store_line_2()
+                if STORE_BUY_line1.checkForInput(STORE_MOUSE_POS):
+                    CHECK=data[35]
+                    CHECK=CHECK.split()
+                    if playerCoi>=1000 and CHECK[3]=='BUYNT':
+                        playerCoi+=-1000
+                        temp=data[35]
+                        temp=temp.split()
+                        temp[3]='OWNED\n'
+                        st=" ".join(temp)
+                        data[35]=st
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+                        # SELECTED=data[2][9:]
+                        # SELECTED=list(map(int,SELECTED.split(',')))
+                        BOUGHT=data[35:38]
+                   
+                    if CHECK[3]=='OWNED' and STORE_BUY_line1.checkForInput(STORE_MOUSE_POS):
+                        #thay doi mau net ve
+                        templine=data[10].split()
+                        templine[1]='GREEN'
+                        templine[2]='7\n'
+                        stline=" ".join(templine)
+                        data[10]=stline
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+                        #thay doi o select
+                        temp=data[6].split()
+                        temp[2]='200'
+                        temp[4]='100\n'
+                        st=" ".join(temp)
+                        data[6]=st
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+
+                if STORE_BUY_line2.checkForInput(STORE_MOUSE_POS):
+                    CHECK=data[36]
+                    CHECK=CHECK.split()
+                    if playerCoi>=1000 and CHECK[3]=='BUYNT':
+                        playerCoi+=-1000
+                        temp=data[36]
+                        temp=temp.split()
+                        temp[3]='OWNED\n'
+                        st=" ".join(temp)
+                        data[36]=st
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+                        # SELECTED=data[2][9:]
+                        # SELECTED=list(map(int,SELECTED.split(',')))
+                        BOUGHT=data[35:38]
+                   
+                    if CHECK[3]=='OWNED' and STORE_BUY_line2.checkForInput(STORE_MOUSE_POS):
+                        #thay doi mau net ve
+                        templine=data[10].split()
+                        templine[1]='BLACK'
+                        templine[2]='7\n'
+                        stline=" ".join(templine)
+                        data[10]=stline
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+                        #thay doi o select
+                        temp=data[6].split()
+                        temp[2]='350'
+                        temp[4]='100\n'
+                        st=" ".join(temp)
+                        data[6]=st
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+
+                if STORE_BUY_line3.checkForInput(STORE_MOUSE_POS):
+                    CHECK=data[37]
+                    CHECK=CHECK.split()
+                    if playerCoi>=1000 and CHECK[3]=='BUYNT':
+                        playerCoi+=-1000
+                        temp=data[37]
+                        temp=temp.split()
+                        temp[3]='OWNED\n'
+                        st=" ".join(temp)
+                        data[37]=st
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+                        # SELECTED=data[2][9:]
+                        # SELECTED=list(map(int,SELECTED.split(',')))
+                        BOUGHT=data[35:38]
+                   
+                    if CHECK[3]=='OWNED' and STORE_BUY_line3.checkForInput(STORE_MOUSE_POS):
+                        #thay doi mau net ve
+                        templine=data[10].split()
+                        templine[1]='YELLOW'
+                        templine[2]='7\n'
+                        stline=" ".join(templine)
+                        data[10]=stline
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+                        #thay doi o select
+                        temp=data[6].split()
+                        temp[2]='500'
+                        temp[4]='100\n'
+                        st=" ".join(temp)
+                        data[6]=st
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+        pygame.display.update()
+        
+def store_line_2():
+    playerCoi=addCoin()
+    ITEMS=['AQUA','TEAL','NAVY']
+    while True:
+        
+        with open('ID.txt', 'r') as file:
+            data = file.readlines()
+        SELECTED=data[8][9:]
+        SELECTED=list(map(int,SELECTED.split()))
+        # SELECTEDLINE=data[10][9:]
+        # SELECTEDLINE=list(SELECTEDLINE.split())
+        BOUGHT=data[40:43]
+        # print(SELECTED)
+        STORE_MOUSE_POS = pygame.mouse.get_pos()
+     
+        SCREEN.fill(WHITE)
+        for i in BOUGHT:
+            XC=int(i.split()[1])
+            YC=int(i.split()[2])
+            if(i.split()[3]=='OWNED'):
+                OPTEXT = get_font(20).render("OWNED", True,'Gray')
+                SCREEN.blit(OPTEXT,(XC,YC))
+            else: 
+                OPTEXT = get_font(20).render("1000", True,'Gray')
+                SCREEN.blit(OPTEXT,(XC+20,YC))
+        
+        pygame.draw.rect(SCREEN,'Gray', pygame.Rect(SELECTED[0],SELECTED[1],SELECTED[2],SELECTED[3]))
+    
+        OPTIONS_TEXT = get_font(20).render("LINE COLOR", True, BLACK)
+        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(SCREEN_W/2,100))
+        SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
+
+        OPTIONS_BACK_MENU = Button(menuimage, pos=(100, SCREEN_H-100), 
+                            text_input="BACK", font=get_font(30), base_color="Black", hovering_color="Green")
+
+        OPTIONS_MENU = Button(menuimage, pos=(300, SCREEN_H-100), 
+                            text_input="MENU", font=get_font(30), base_color="Black", hovering_color="Green")
+
+        OPTIONS_NEXT = Button(menuimage, pos=(500, SCREEN_H-100), 
+                            text_input="NEXT", font=get_font(30), base_color="Black", hovering_color="Green")
+
+        
+        #make character store                    
+        STORE_BUY_line4=items(SCREEN,nv1,(50,200),(300,250),ITEMS[0])
+        # STORE_BUY_BUTTON_nv1=Buyitems(SCREEN,(520,250),'100')
+        
+        STORE_BUY_line5= items(SCREEN,nv2,(50,350),(300,400),ITEMS[1])
+        
+        # STORE_BUY_BUTTON_nv2=Buyitems(SCREEN,(520,400),'100')
+
+        STORE_BUY_line6= items(SCREEN,nv3,(50,500),(300,550),ITEMS[2])
+        # STORE_BUY_BUTTON_nv3=Buyitems(SCREEN,(520,550),'100')
+
+        for button in [OPTIONS_BACK_MENU,OPTIONS_MENU,OPTIONS_NEXT,STORE_BUY_line4,STORE_BUY_line5,STORE_BUY_line6]:
+            button.changeColor(STORE_MOUSE_POS)
+            button.update(SCREEN)
+
+        COINS = font.render(f"{playerCoi}", True, BLACK)
+        SCREEN.blit(COINS, (70,91))
+        SCREEN.blit(coin,(5,80))
+
+        with open("coin.txt","w") as f:
+            f.write(str(playerCoi))
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if OPTIONS_BACK_MENU.checkForInput(STORE_MOUSE_POS):
+                    store_line_1()
+                if OPTIONS_MENU.checkForInput(STORE_MOUSE_POS):
+                    main_menu()
+                # if OPTIONS_NEXT.checkForInput(STORE_MOUSE_POS):
+                #     store_2()
+                if STORE_BUY_line4.checkForInput(STORE_MOUSE_POS):
+                    CHECK=data[40]
+                    CHECK=CHECK.split()
+                    if playerCoi>=1000 and CHECK[3]=='BUYNT':
+                        playerCoi+=-1000
+                        temp=data[40]
+                        temp=temp.split()
+                        temp[3]='OWNED\n'
+                        st=" ".join(temp)
+                        data[40]=st
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+                        # SELECTED=data[2][9:]
+                        # SELECTED=list(map(int,SELECTED.split(',')))
+                        BOUGHT=data[40:43]
+                   
+                    if CHECK[3]=='OWNED' and STORE_BUY_line4.checkForInput(STORE_MOUSE_POS):
+                        #thay doi mau net ve
+                        templine=data[10].split()
+                        templine[1]='AQUA'
+                        templine[2]='7\n'
+                        stline=" ".join(templine)
+                        data[10]=stline
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+                        #thay doi o select
+                        temp=data[8].split()
+                        temp[2]='200'
+                        temp[4]='100\n'
+                        st=" ".join(temp)
+                        data[8]=st
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+
+                if STORE_BUY_line5.checkForInput(STORE_MOUSE_POS):
+                    CHECK=data[41]
+                    CHECK=CHECK.split()
+                    if playerCoi>=1000 and CHECK[3]=='BUYNT':
+                        playerCoi+=-1000
+                        temp=data[41]
+                        temp=temp.split()
+                        temp[3]='OWNED\n'
+                        st=" ".join(temp)
+                        data[41]=st
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+                        # SELECTED=data[2][9:]
+                        # SELECTED=list(map(int,SELECTED.split(',')))
+                        BOUGHT=data[40:43]
+                   
+                    if CHECK[3]=='OWNED' and STORE_BUY_line5.checkForInput(STORE_MOUSE_POS):
+                        #thay doi mau net ve
+                        templine=data[10].split()
+                        templine[1]='TEAL'
+                        templine[2]='7\n'
+                        stline=" ".join(templine)
+                        data[10]=stline
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+                        #thay doi o select
+                        temp=data[8].split()
+                        temp[2]='350'
+                        temp[4]='100\n'
+                        st=" ".join(temp)
+                        data[8]=st
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+
+                if STORE_BUY_line6.checkForInput(STORE_MOUSE_POS):
+                    CHECK=data[42]
+                    CHECK=CHECK.split()
+                    if playerCoi>=1000 and CHECK[3]=='BUYNT':
+                        playerCoi+=-1000
+                        temp=data[42]
+                        temp=temp.split()
+                        temp[3]='OWNED\n'
+                        st=" ".join(temp)
+                        data[42]=st
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+                        # SELECTED=data[2][9:]
+                        # SELECTED=list(map(int,SELECTED.split(',')))
+                        BOUGHT=data[40:43]
+                   
+                    if CHECK[3]=='OWNED' and STORE_BUY_line6.checkForInput(STORE_MOUSE_POS):
+                        #thay doi mau net ve
+                        templine=data[10].split()
+                        templine[1]='NAVY'
+                        templine[2]='7\n'
+                        stline=" ".join(templine)
+                        data[10]=stline
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+                        #thay doi o select
+                        temp=data[8].split()
+                        temp[2]='500'
+                        temp[4]='100\n'
+                        st=" ".join(temp)
+                        data[8]=st
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+                
+        pygame.display.update()
+        
 
 def store_1():
     playerCoi=addCoin()
-
     ITEMS=['HEXAGON','CITYBALL','METALBALL']
-    # with open('ID.txt', 'r') as file:
-    #     data = file.readlines()
-    # SELECTED=data[2][9:]
-    # SELECTED=list(map(int,SELECTED.split()))
-    # BOUGHT=data[20:23]
-    # print(SELECTED)
-
-    
-
     while True:
         
         with open('ID.txt', 'r') as file:
@@ -460,7 +863,7 @@ def store_1():
         
         pygame.draw.rect(SCREEN,'Gray', pygame.Rect(SELECTED[0],SELECTED[1],SELECTED[2],SELECTED[3]))
     
-        OPTIONS_TEXT = get_font(20).render("STORE 1", True, BLACK)
+        OPTIONS_TEXT = get_font(20).render("STORE", True, BLACK)
         OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(SCREEN_W/2,100))
         SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
@@ -502,7 +905,7 @@ def store_1():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if OPTIONS_BACK_MENU.checkForInput(STORE_MOUSE_POS):
-                    main_menu()
+                    shop()
                 if OPTIONS_MENU.checkForInput(STORE_MOUSE_POS):
                     main_menu()
                 if OPTIONS_NEXT.checkForInput(STORE_MOUSE_POS):
@@ -616,7 +1019,7 @@ def store_2():
 
         pygame.draw.rect(SCREEN,'Gray', pygame.Rect(SELECTED[0],SELECTED[1],SELECTED[2],SELECTED[3]))
 
-        OPTIONS_TEXT = get_font(20).render("STORE 2", True, BLACK)
+        OPTIONS_TEXT = get_font(20).render("STORE", True, BLACK)
         OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(SCREEN_W/2,100))
         SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
@@ -890,7 +1293,7 @@ def main_menu():
                 if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
                     play()
                 if STORE_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    store_1()
+                    shop()
                 if CREDITS_BUTTON.checkForInput(MENU_MOUSE_POS):
                     credit()   
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
