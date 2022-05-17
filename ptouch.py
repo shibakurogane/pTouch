@@ -69,8 +69,8 @@ playerCoin=0
 
 line=[]
 
-objheight=100
-objwidth=100
+objheight=200
+objwidth=200
  
 nv_height=50
 nv_width=50
@@ -109,6 +109,9 @@ nv = pygame.transform.scale(nv,(nv_width,nv_height))
  
 BG=pygame.image.load('image/background/gray3.png').convert_alpha()
 BG=pygame.transform.scale(BG,(SCREEN_WIDTH,1000))
+
+FRAME=pygame.image.load('image/background/khungvuongmetal_1.png').convert_alpha()
+FRAME=pygame.transform.scale(FRAME,(110,110))
 
 METALFLOOR=pygame.image.load('image/background/metalfloor.jpg').convert_alpha()
 METALFLOOR=pygame.transform.scale(METALFLOOR,(150,150))
@@ -218,7 +221,7 @@ class Background():
         DISPLAYSURF.blit(METALFLOOR,(300,SCREEN_HEIGHT-150))
         # DISPLAYSURF.blit(GRASS,(0,SCREEN_HEIGHT-(150*2)))
         DISPLAYSURF.blit(METALFLOOR,(450,SCREEN_HEIGHT-150))
-        
+        DISPLAYSURF.blit(FRAME,(245,0))
         # DISPLAYSURF.blit(GRASS,(SCREEN_WIDTH-300,SCREEN_HEIGHT-(150*2)))
         
          
@@ -333,7 +336,7 @@ def play():
             #             entity.move()
         bg.update()
         bg.draw()
-        DISPLAYSURF.blit(hinhdothi,(SCREEN_WIDTH/3,0)) 
+        DISPLAYSURF.blit(hinhdothi,(250,5)) 
         #DISPLAYSURF.blit(background, (0,0))
 
         if(highestScore < LIFE):
