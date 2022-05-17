@@ -368,7 +368,7 @@ def play():
 
         if len(line)>1:
             for i in range(1,len(line)):  
-                pygame.draw.line(DISPLAYSURF,SELECTED[0],(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),7)
+                pygame.draw.line(DISPLAYSURF,SELECTED[0],(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),9)
                 # pygame.draw.line(DISPLAYSURF,BLACK,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),5)
                 # pygame.draw.line(DISPLAYSURF,WHITE,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),3)
         #To be run if collision occurs between Player and Enemy
