@@ -8,9 +8,9 @@ selected 0 500 800 100
 
 selected 0 500 800 100
 
-selected NAVY 7
+selected YELLOW 7
 
-
+selected WHITE 7
 
 
 

@@ -363,12 +363,15 @@ def play():
         #     LIFE -= 2
         with open('ID.txt', 'r') as file:
             data = file.readlines()
-        SELECTED=data[10][9:]
-        SELECTED=list(SELECTED.split())
+        SELECTED1=data[10][9:]
+        SELECTED1=list(SELECTED1.split())
 
+        SELECTED2=data[12][9:]
+        SELECTED2=list(SELECTED2.split())
         if len(line)>1:
             for i in range(1,len(line)):  
-                pygame.draw.line(DISPLAYSURF,SELECTED[0],(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),9)
+                pygame.draw.line(DISPLAYSURF,SELECTED1[0],(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),9)
+                pygame.draw.line(DISPLAYSURF,SELECTED2[0],(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),7)
                 # pygame.draw.line(DISPLAYSURF,BLACK,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),5)
                 # pygame.draw.line(DISPLAYSURF,WHITE,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),3)
         #To be run if collision occurs between Player and Enemy
@@ -571,12 +574,20 @@ def store_line_1():
                         BOUGHT=data[35:38]
                    
                     if CHECK[3]=='OWNED' and STORE_BUY_line1.checkForInput(STORE_MOUSE_POS):
-                        #thay doi mau net ve
+                        #thay doi mau net ve lon
                         templine=data[10].split()
                         templine[1]='GREEN'
                         templine[2]='7\n'
                         stline=" ".join(templine)
                         data[10]=stline
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+                        #thay doi mau net ve nho
+                        templinesmall=data[12].split()
+                        templinesmall[1]='WHITE'
+                        templinesmall[2]='7\n'
+                        stlinesmall=" ".join(templinesmall)
+                        data[12]=stlinesmall
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
                         #thay doi o select
@@ -613,6 +624,14 @@ def store_line_1():
                         data[10]=stline
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
+                        #thay doi mau net ve nho
+                        templinesmall=data[12].split()
+                        templinesmall[1]='WHITE'
+                        templinesmall[2]='7\n'
+                        stlinesmall=" ".join(templinesmall)
+                        data[12]=stlinesmall
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
                         #thay doi o select
                         temp=data[6].split()
                         temp[2]='350'
@@ -645,6 +664,14 @@ def store_line_1():
                         templine[2]='7\n'
                         stline=" ".join(templine)
                         data[10]=stline
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+                        #thay doi mau net ve nho
+                        templinesmall=data[12].split()
+                        templinesmall[1]='WHITE'
+                        templinesmall[2]='7\n'
+                        stlinesmall=" ".join(templinesmall)
+                        data[12]=stlinesmall
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
                         #thay doi o select
@@ -757,6 +784,14 @@ def store_line_2():
                         data[10]=stline
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
+                        #thay doi mau net ve nho
+                        templinesmall=data[12].split()
+                        templinesmall[1]='WHITE'
+                        templinesmall[2]='7\n'
+                        stlinesmall=" ".join(templinesmall)
+                        data[12]=stlinesmall
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
                         #thay doi o select
                         temp=data[8].split()
                         temp[2]='200'
@@ -791,6 +826,14 @@ def store_line_2():
                         data[10]=stline
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
+                        #thay doi mau net ve nho
+                        templinesmall=data[12].split()
+                        templinesmall[1]='WHITE'
+                        templinesmall[2]='7\n'
+                        stlinesmall=" ".join(templinesmall)
+                        data[12]=stlinesmall
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
                         #thay doi o select
                         temp=data[8].split()
                         temp[2]='350'
@@ -823,6 +866,14 @@ def store_line_2():
                         templine[2]='7\n'
                         stline=" ".join(templine)
                         data[10]=stline
+                        with open("ID.txt","w") as f:
+                            f.write(listToString(data))
+                        #thay doi mau net ve nho
+                        templinesmall=data[12].split()
+                        templinesmall[1]='WHITE'
+                        templinesmall[2]='7\n'
+                        stlinesmall=" ".join(templinesmall)
+                        data[12]=stlinesmall
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
                         #thay doi o select
