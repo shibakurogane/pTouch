@@ -4,13 +4,13 @@ selected 0 350 800 100
 
 selected 0 -200 800 0
 
-selected 0 500 800 100
+selected 0 350 800 100
 
 selected 0 500 800 100
 
-selected YELLOW 7
+selected LAVA 7
 
-selected WHITE 7
+selected BLOOD 7
 
 
 
@@ -19,8 +19,8 @@ selected WHITE 7
 
 Bought
 HEXAGON 450 240 OWNED
-CITYBALL 450 390 OWNED
-METALBALL 450 540 OWNED
+CITYBALL 450 390 BUYNT
+METALBALL 450 540 BUYNT
 
 
 

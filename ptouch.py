@@ -45,6 +45,8 @@ GREEN = (0, 255, 0)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 YELLOW = (255, 255, 102)
+BLUE2  = (0, 212, 255)
+PURPLE2 = (239, 0 ,255)
 AQUA	=	(0,255,255)
 MAGENTA =	(255,0,255)
 SILVER	=	(192,192,192)
@@ -54,7 +56,8 @@ OLIVE	=	(128,128,0)
 PURPLE	=	(128,0,128)
 TEAL	=	(0,128,128)
 NAVY	=	(0,0,128)
- 
+LAVA    =   (252,176,69)
+BLOOD   =   (253,29,29)
 #
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 800
@@ -369,10 +372,13 @@ def play():
         SELECTED2=data[12][9:]
         SELECTED2=list(SELECTED2.split())
         if len(line)>1:
-            for i in range(1,len(line)):  
-                pygame.draw.line(DISPLAYSURF,SELECTED1[0],(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),9)
-                pygame.draw.line(DISPLAYSURF,SELECTED2[0],(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),7)
-                # pygame.draw.line(DISPLAYSURF,BLACK,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),5)
+            for i in range(1,len(line)):
+                if SELECTED1[0]=='LAVA':
+                    pygame.draw.line(DISPLAYSURF,BLOOD,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),9)
+                    pygame.draw.line(DISPLAYSURF,LAVA,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),5)
+                else:
+                    pygame.draw.line(DISPLAYSURF,SELECTED1[0],(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),9)
+                    pygame.draw.line(DISPLAYSURF,SELECTED2[0],(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),5)
                 # pygame.draw.line(DISPLAYSURF,WHITE,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),3)
         #To be run if collision occurs between Player and Enemy
         # print(Player1.rect,'',E1.rect)
@@ -686,7 +692,7 @@ def store_line_1():
         
 def store_line_2():
     playerCoi=addCoin()
-    ITEMS=['AQUA','TEAL','NAVY']
+    ITEMS=['AQUA','TEAL','LAVA']
     while True:
         
         with open('ID.txt', 'r') as file:
@@ -862,7 +868,7 @@ def store_line_2():
                     if CHECK[3]=='OWNED' and STORE_BUY_line6.checkForInput(STORE_MOUSE_POS):
                         #thay doi mau net ve
                         templine=data[10].split()
-                        templine[1]='NAVY'
+                        templine[1]='LAVA'
                         templine[2]='7\n'
                         stline=" ".join(templine)
                         data[10]=stline
@@ -870,7 +876,7 @@ def store_line_2():
                             f.write(listToString(data))
                         #thay doi mau net ve nho
                         templinesmall=data[12].split()
-                        templinesmall[1]='WHITE'
+                        templinesmall[1]='BLOOD'
                         templinesmall[2]='7\n'
                         stlinesmall=" ".join(templinesmall)
                         data[12]=stlinesmall
