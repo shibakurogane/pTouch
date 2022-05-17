@@ -55,7 +55,6 @@ MAROON	=	(128,0,0)
 OLIVE	=	(128,128,0)
 PURPLE	=	(128,0,128)
 TEAL	=	(0,128,128)
-NAVY	=	(0,0,128)
 LAVA    =   (252,176,69)
 BLOOD   =   (253,29,29)
 #
@@ -102,46 +101,40 @@ grap.CreateGraph(RANK)
 dothi=pygame.image.load('dothi.png').convert_alpha()
 hinhdothi=pygame.transform.scale(dothi,(100 ,100)).convert_alpha()
 
-obj=pygame.image.load('image/bigdrill_3.png').convert_alpha()
+obj=pygame.image.load('image/enemy/bigdrill_3.png').convert_alpha()
 obj=pygame.transform.scale(obj,(objwidth ,objheight)).convert_alpha()
 
-nv = pygame.image.load('hexagont.png').convert_alpha()
+nv = pygame.image.load('image/ball/hexagont.png').convert_alpha()
 nv = pygame.transform.scale(nv,(nv_width,nv_height))
  
-BG=pygame.image.load('gray3.png').convert_alpha()
+BG=pygame.image.load('image/background/gray3.png').convert_alpha()
 BG=pygame.transform.scale(BG,(SCREEN_WIDTH,1000))
 
-BG1=pygame.image.load('BlacknWhite.webp').convert_alpha()
-BG1=pygame.transform.scale(BG1,(SCREEN_WIDTH,1000))
-
-BG2=pygame.image.load('BlacknWhite2.png').convert_alpha()
-BG2=pygame.transform.scale(BG2,(SCREEN_WIDTH,1000))
-
-METALFLOOR=pygame.image.load('metalfloor.jpg').convert_alpha()
+METALFLOOR=pygame.image.load('image/background/metalfloor.jpg').convert_alpha()
 METALFLOOR=pygame.transform.scale(METALFLOOR,(150,150))
 
-nv1 = pygame.image.load('hexagont.png').convert_alpha()
+nv1 = pygame.image.load('image/ball/hexagont.png').convert_alpha()
 nv1 = pygame.transform.scale(nv1,(nv_w,nv_h))
 
-nv2 = pygame.image.load('image/cityball.png').convert_alpha()
+nv2 = pygame.image.load('image/ball/cityball.png').convert_alpha()
 nv2 = pygame.transform.scale(nv2,(nv_w,nv_h))
 
-nv3 = pygame.image.load('image/metal_ball.png').convert_alpha()
+nv3 = pygame.image.load('image/ball/metal_ball.png').convert_alpha()
 nv3 = pygame.transform.scale(nv3,(nv_w,nv_h))
 
-nv4 = pygame.image.load('image/earthball.png').convert_alpha()
+nv4 = pygame.image.load('image/ball/earthball.png').convert_alpha()
 nv4 = pygame.transform.scale(nv4,(nv_w,nv_h))
 
-nv5 = pygame.image.load('image/knifeball.png').convert_alpha()
+nv5 = pygame.image.load('image/ball/knifeball.png').convert_alpha()
 nv5 = pygame.transform.scale(nv5,(nv_w,nv_h))
 
-nv6 = pygame.image.load('image/ppball.png').convert_alpha()
+nv6 = pygame.image.load('image/ball/ppball.png').convert_alpha()
 nv6 = pygame.transform.scale(nv6,(nv_w,nv_h))
 
-coin=pygame.image.load('coin.png').convert_alpha()
+coin=pygame.image.load('image/value/coin.png').convert_alpha()
 coin=pygame.transform.scale(coin,(50,50))
 
-pink=pygame.image.load('pink.jpg').convert_alpha()
+pink=pygame.image.load('image/background/pink.jpg').convert_alpha()
 menuimage=pygame.transform.scale(pink,(200,80))
 
 buybutton=pygame.transform.scale(pink,(200,100))
@@ -462,9 +455,9 @@ def shop():
         SHOP_TEXT = get_font(30).render("shop", True,BLACK)
         SHOP_RECT = SHOP_TEXT.get_rect(center=(SCREEN_W/2, 100))
 
-        SHOP_BALL_BUTTON = Button(menuimage, pos=(SCREEN_W/2, 250), 
+        SHOP_BALL_BUTTON = Button(menuimage, pos=(SCREEN_W/2, 350), 
                             text_input="BALL", font=get_font(30), base_color="#CCFFFF", hovering_color="White")
-        SHOP_LINE_BUTTON = Button(menuimage, pos=(SCREEN_W/2, 370), 
+        SHOP_LINE_BUTTON = Button(menuimage, pos=(SCREEN_W/2, 470), 
                             text_input="LINE", font=get_font(30), base_color="#CCFFFF", hovering_color="White")
         SHOP_BACK_BUTTON = Button(menuimage, pos=(SCREEN_W/2, SCREEN_H-100), 
                             text_input="BACK", font=get_font(30), base_color="#CCFFFF", hovering_color="White")
@@ -982,7 +975,7 @@ def store_1():
                     CHECK=CHECK.split()
                     if CHECK[3]=='OWNED' and STORE_BUY_nv1.checkForInput(STORE_MOUSE_POS):
                         print(1111)                  
-                        Player1.image= pygame.transform.scale(pygame.image.load('image/cityball.png'),(nv_width,nv_height)).convert_alpha()
+                        Player1.image= pygame.transform.scale(pygame.image.load('image/ball/hexagont.png'),(nv_width,nv_height)).convert_alpha()
                         temp=data[2].split()
                         temp[2]='200'
                         temp[4]='100\n'
@@ -990,7 +983,7 @@ def store_1():
                         data[2]=st
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
-                        Player1.image= pygame.transform.scale(pygame.image.load('hexagont.png'),(nv_width,nv_height)).convert_alpha()
+                        
                 if STORE_BUY_nv2.checkForInput(STORE_MOUSE_POS):
                     CHECK=data[21]
                     CHECK=CHECK.split()
@@ -1009,7 +1002,7 @@ def store_1():
                    
                     if CHECK[3]=='OWNED' and STORE_BUY_nv2.checkForInput(STORE_MOUSE_POS):
                         print(2222)                  
-                        Player1.image= pygame.transform.scale(pygame.image.load('image/cityball.png'),(nv_width,nv_height)).convert_alpha()
+                        Player1.image= pygame.transform.scale(pygame.image.load('image/ball/cityball.png'),(nv_width,nv_height)).convert_alpha()
                         temp=data[2].split()
                         temp[2]='350'
                         temp[4]='100\n'
@@ -1037,7 +1030,7 @@ def store_1():
                         BOUGHT=data[20:23]
                     if CHECK[3]=='OWNED' and STORE_BUY_nv3.checkForInput(STORE_MOUSE_POS):
                         print(3333)
-                        Player1.image= pygame.transform.scale(pygame.image.load('image/metal_ball.png'),(nv_width,nv_height)).convert_alpha()
+                        Player1.image= pygame.transform.scale(pygame.image.load('image/ball/metal_ball.png'),(nv_width,nv_height)).convert_alpha()
                         temp=data[2].split()
                         temp[2]='500'
                         temp[4]='100\n'
@@ -1145,7 +1138,7 @@ def store_2():
                         BOUGHT=data[30:33]
                     if CHECK[3]=='OWNED' and STORE_BUY_nv4.checkForInput(STORE_MOUSE_POS):
                         print(4444)
-                        Player1.image= pygame.transform.scale(pygame.image.load('image/earthball.png'),(nv_width,nv_height)).convert_alpha()
+                        Player1.image= pygame.transform.scale(pygame.image.load('image/ball/earthball.png'),(nv_width,nv_height)).convert_alpha()
                         temp=data[4].split()
                         temp[2]='200'
                         temp[4]='100\n'
@@ -1171,7 +1164,7 @@ def store_2():
                         BOUGHT=data[30:33]
                     if CHECK[3]=='OWNED' and STORE_BUY_nv5.checkForInput(STORE_MOUSE_POS):
                         print(5555)
-                        Player1.image= pygame.transform.scale(pygame.image.load('image/knifeball.png'),(nv_width,nv_height)).convert_alpha()
+                        Player1.image= pygame.transform.scale(pygame.image.load('image/ball/knifeball.png'),(nv_width,nv_height)).convert_alpha()
                         temp=data[4].split()
                         temp[2]='350'
                         temp[4]='100\n'
@@ -1197,7 +1190,7 @@ def store_2():
                         BOUGHT=data[30:33]
                     if CHECK[3]=='OWNED' and STORE_BUY_nv6.checkForInput(STORE_MOUSE_POS):
                         print(6666)
-                        Player1.image= pygame.transform.scale(pygame.image.load('image/ppball.png'),(nv_width,nv_height)).convert_alpha()
+                        Player1.image= pygame.transform.scale(pygame.image.load('image/ball/ppball.png'),(nv_width,nv_height)).convert_alpha()
                         temp=data[4].split()
                         temp[2]='500'
                         temp[4]='100\n'
