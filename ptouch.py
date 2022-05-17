@@ -45,7 +45,8 @@ GREEN = (0, 255, 0)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 YELLOW = (255, 255, 102)
- 
+BLUE2  = (0, 212, 255)
+PURPLE = (239, 0 ,255)
 #
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 800
@@ -350,8 +351,8 @@ def play():
         #     LIFE -= 2
         if len(line)>1:
             for i in range(1,len(line)):
-                pygame.draw.line(DISPLAYSURF,GREEN,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),7)
-                pygame.draw.line(DISPLAYSURF,BLACK,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),5)
+                pygame.draw.line(DISPLAYSURF,(253,29,29),(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),9)
+                pygame.draw.line(DISPLAYSURF,(252,176,69),(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),5)
                 # pygame.draw.line(DISPLAYSURF,WHITE,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),3)
         #To be run if collision occurs between Player and Enemy
         # print(Player1.rect,'',E1.rect)
