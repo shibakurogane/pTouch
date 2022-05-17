@@ -506,6 +506,13 @@ def store_1():
                 if OPTIONS_MENU.checkForInput(STORE_MOUSE_POS):
                     main_menu()
                 if OPTIONS_NEXT.checkForInput(STORE_MOUSE_POS):
+                    temp=data[2].split()
+                    temp[2]='-200'
+                    temp[4]='0\n'
+                    st=" ".join(temp)
+                    data[2]=st
+                    with open("ID.txt","w") as f:
+                        f.write(listToString(data))
                     store_2()
                 if STORE_BUY_nv1.checkForInput(STORE_MOUSE_POS):
                     CHECK=data[20]
@@ -645,7 +652,15 @@ def store_2():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if OPTIONS_BACK.checkForInput(STORE_MOUSE_POS):
+                    temp=data[4].split()
+                    temp[2]='-200'
+                    temp[4]='0\n'
+                    st=" ".join(temp)
+                    data[4]=st
+                    with open("ID.txt","w") as f:
+                        f.write(listToString(data))
                     store_1()
+                    
                 if OPTIONS_MENU.checkForInput(STORE_MOUSE_POS):
                     main_menu()
 
@@ -691,6 +706,7 @@ def store_2():
                         # SELECTED=list(map(int,SELECTED.split(',')))
                         BOUGHT=data[30:33]
                     if CHECK[3]=='OWNED' and STORE_BUY_nv5.checkForInput(STORE_MOUSE_POS):
+                        print(5555)
                         Player1.image= pygame.transform.scale(pygame.image.load('image/knifeball.png'),(nv_width,nv_height)).convert_alpha()
                         temp=data[4].split()
                         temp[2]='350'
@@ -716,6 +732,7 @@ def store_2():
                         # SELECTED=list(map(int,SELECTED.split(',')))
                         BOUGHT=data[30:33]
                     if CHECK[3]=='OWNED' and STORE_BUY_nv6.checkForInput(STORE_MOUSE_POS):
+                        print(6666)
                         Player1.image= pygame.transform.scale(pygame.image.load('image/ppball.png'),(nv_width,nv_height)).convert_alpha()
                         temp=data[4].split()
                         temp[2]='500'
