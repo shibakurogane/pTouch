@@ -1,7 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
-import cv2
 pointsX=np.linspace(0,1,1000)
 def sin_f(x):
   return np.sin(x)        
