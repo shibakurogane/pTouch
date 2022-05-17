@@ -1,6 +1,5 @@
 import numpy as np
 import pygame
-from sklearn.preprocessing import StandardScaler
 def leftBorderDetect(img):
   for x in range(img.shape[1]):
     border=False
