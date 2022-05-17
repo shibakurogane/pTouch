@@ -96,7 +96,9 @@ pygame.display.set_caption("ptouch")
 # obj=pygame.transform.scale(obj,(objwidth ,objheight))
 
 RANK=1
-W,yDraw=generator.CreateGraph(RANK,'dothi.png')
+grap=generator.Graph('dothi.png')
+grap.CreateGraph(RANK)
+# W,yDraw=generator.CreateGraph(RANK,'dothi.png')
 dothi=pygame.image.load('dothi.png').convert_alpha()
 hinhdothi=pygame.transform.scale(dothi,(100 ,100)).convert_alpha()
 
@@ -154,7 +156,7 @@ class Enemy(pygame.sprite.Sprite):
         self.alive=True
         
 
-    def move(self,W,yDraw,RANK,line,playerDraw):
+    def move(self):
             global LIFE
             self.rect.move_ip(0,SPEED)
             if (self.rect.bottom >= (SCREEN_HEIGHT-75)):
@@ -317,13 +319,14 @@ def play():
                         # print(pxarray.shape)
                         # plt.imsave('image.png',pxarray)
                         # pygame.image.save(pxarray,'input.png')
-                        PredictResult=imagePredict.Proccess(W,yDraw,RANK,line)
-                        
+                        # PredictResult=imagePredict.Proccess(W,yDraw,RANK,line)
+                        PredictResult=grap.Proccess(line)
                         line=[]
                         if PredictResult:
                             LIFE+=1
                             RANK=(LIFE+4)//4
-                            W,yDraw=generator.CreateGraph(RANK,'dothi.png')
+                            grap.CreateGraph(RANK)
+                            # W,yDraw=generator.CreateGraph(RANK,'dothi.png')
                             dothi=pygame.image.load('dothi.png').convert_alpha()
                             # obj=pygame.transform.scale(dothi,(objwidth ,objheight)).convert_alpha()
                             hinhdothi=pygame.transform.scale(dothi,(100 ,100)).convert_alpha()               
@@ -359,7 +362,7 @@ def play():
         # conclide=False
         for entity in enemies:
             DISPLAYSURF.blit(entity.image, entity.rect)
-            echk=entity.move(W,yDraw,RANK,line,playerDraw)
+            echk=entity.move()
             # if echk:
             #     conclide=True
         # if conclide:
@@ -1285,7 +1288,7 @@ def GameOver(point):
                     global playerDraw
                     playerDraw=False
                     global W,yDraw
-                    W,yDraw=generator.CreateGraph(RANK,'dothi.png')
+                    grap.CreateGraph(RANK)
                     global hinhdothi
                     dothi=pygame.image.load('dothi.png').convert_alpha()
                     hinhdothi=pygame.transform.scale(dothi,(100 ,100)).convert_alpha()
@@ -1303,7 +1306,7 @@ def GameOver(point):
                     # global playerDraw
                     playerDraw=False
                     # global W,yDraw
-                    W,yDraw=generator.CreateGraph(RANK,'dothi.png')
+                    grap.CreateGraph(RANK)
                     # global hinhdothi
                     dothi=pygame.image.load('dothi.png').convert_alpha()
                     hinhdothi=pygame.transform.scale(dothi,(100 ,100)).convert_alpha()
