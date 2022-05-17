@@ -527,6 +527,7 @@ def store_1():
                         data[2]=st
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
+                        Player1.image= pygame.transform.scale(pygame.image.load('hexagont.png'),(nv_width,nv_height)).convert_alpha()
                 if STORE_BUY_nv2.checkForInput(STORE_MOUSE_POS):
                     CHECK=data[21]
                     CHECK=CHECK.split()
