@@ -6,6 +6,7 @@ from pickle import GLOBAL
 from turtle import up, update
 from cv2 import line
 import pygame, sys
+from pygame import mixer
 
 from pygame.locals import *
 import random, time
@@ -41,14 +42,8 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 YELLOW = (255, 255, 102)
 BLUE2  = (0, 212, 255)
-PURPLE2 = (239, 0 ,255)
 AQUA	=	(0,255,255)
-MAGENTA =	(255,0,255)
-SILVER	=	(192,192,192)
 GRAY	=	(128,128,128)
-MAROON	=	(128,0,0)
-OLIVE	=	(128,128,0)
-PURPLE	=	(128,0,128)
 TEAL	=	(0,128,128)
 LAVA    =   (252,176,69)
 BLOOD   =   (253,29,29)
@@ -152,6 +147,9 @@ menuimage=pygame.transform.scale(pink,(200,80))
 
 buybutton=pygame.transform.scale(pink,(200,100))
 
+#background music
+pygame.mixer.music.load('music/backgroundmusic.wav')
+pygame.mixer.music.play(-1)
 
 class Enemy(pygame.sprite.Sprite):
     '''
@@ -290,6 +288,7 @@ def play():
         highestScore = 0
 
     while run:
+        
         #Cycles through all occurring events   
         for event in pygame.event.get():
             if event.type == INC_SPEED:
