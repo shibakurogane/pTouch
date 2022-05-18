@@ -115,7 +115,7 @@ def CreateGraph(rank,outputName):
   for i in range(RANK):
     pointsY+=W[i][0]*pointsX**i
   #DRAWING
-  plt.plot(pointsX,pointsY,'blue',linewidth=20)
+  plt.plot(pointsX,pointsY,'black',linewidth=20)
 
   plt.axis('off')
   plt.savefig(outputName)
@@ -154,7 +154,7 @@ class Graph():
     for i in range(RANK):
       pointsY+=W[i][0]*pointsX**i
   #DRAWING
-    plt.plot(pointsX,pointsY,'blue',linewidth=20)
+    plt.plot(pointsX,pointsY,'black',linewidth=20)
 
     plt.axis('off')
     plt.savefig(self.outputName)

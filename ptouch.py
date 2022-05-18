@@ -27,11 +27,6 @@ def addCoin(point=0):
             f.write(str(playerCoin))
     return playerCoin
 
-# from main import RANK
-
-#option
-
-#Initializing 
 pygame.init()
  
 # FPS 
@@ -70,7 +65,7 @@ playerCoin=0
 line=[]
 
 objheight=200
-objwidth=200
+objwidth=150
  
 nv_height=50
 nv_width=50
@@ -78,21 +73,18 @@ nv_width=50
 nv_w=100
 nv_h=100
 
+line_w=100
+line_h=100
+
 #Setting up Fonts
 font = pygame.font.Font('8-BIT WONDER.TTF', 20)
 font_small = pygame.font.SysFont("Verdana", 20)
-# game_over = font.render("GAME OVER", True, BLACK)
-# main_font = pygame.font.SysFont("comicsans", 50)
-# lost_font = pygame.font.SysFont("comicsans", 60)
- 
+
 #Create a white screen 
 DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 SCREEN = pygame.display.set_mode((SCREEN_W, SCREEN_H))
 # DISPLAYSURF.fill(WHITE)
 pygame.display.set_caption("ptouch")
-
-# obj=pygame.image.load('gach.webp').convert_alpha()
-# obj=pygame.transform.scale(obj,(objwidth ,objheight))
 
 RANK=1
 grap=generator.Graph('dothi.png')
@@ -134,6 +126,24 @@ nv5 = pygame.transform.scale(nv5,(nv_w,nv_h))
 nv6 = pygame.image.load('image/ball/ppball.png').convert_alpha()
 nv6 = pygame.transform.scale(nv6,(nv_w,nv_h))
 
+green = pygame.image.load('image/line/greenline.png').convert_alpha()
+green = pygame.transform.scale(green,(line_w,line_h))
+
+black = pygame.image.load('image/line/blackline.png').convert_alpha()
+black = pygame.transform.scale(black,(line_w,line_h))
+
+yellow = pygame.image.load('image/line/yellowline.png').convert_alpha()
+yellow = pygame.transform.scale(yellow,(line_w,line_h))
+
+aqua = pygame.image.load('image/line/aqualine.png').convert_alpha()
+aqua = pygame.transform.scale(aqua,(line_w,line_h))
+
+teal = pygame.image.load('image/line/tealline.png').convert_alpha()
+teal = pygame.transform.scale(teal,(line_w,line_h))
+
+lava = pygame.image.load('image/line/lavaline.png').convert_alpha()
+lava = pygame.transform.scale(lava,(line_w,line_h))
+
 coin=pygame.image.load('image/value/coin.png').convert_alpha()
 coin=pygame.transform.scale(coin,(50,50))
 
@@ -144,6 +154,11 @@ buybutton=pygame.transform.scale(pink,(200,100))
 
 
 class Enemy(pygame.sprite.Sprite):
+    '''
+    class tượng trưng cho kẻ thù 
+    Kẻ thù sẽ rơi từ trên xuống với tốc độ tăng dần và ngẫu nhiên
+    Nếu chạm trúng người chơi, trò chơi sẽ kết thúc
+    '''
     def __init__(self):
         super().__init__() 
         self.image = obj
@@ -165,6 +180,10 @@ class Enemy(pygame.sprite.Sprite):
             
  
 class Player(pygame.sprite.Sprite):
+    '''
+    Class người chơi
+    Người chơi được phép di chuyển trái phải cới tốc độ dược đặt trước
+    '''
     def __init__(self):
         super().__init__() 
         self.image = nv
@@ -173,11 +192,6 @@ class Player(pygame.sprite.Sprite):
         
     def move(self):
         pressed_keys = pygame.key.get_pressed()
-       #if pressed_keys[K_UP]:
-            #self.rect.move_ip(0, -5)
-       #if pressed_keys[K_DOWN]:
-            #self.rect.move_ip(0,5)
-         
         if self.rect.left > 0:
               if pressed_keys[K_LEFT] or pressed_keys[K_a]:
                   self.rect.move_ip(-7, 0)
@@ -192,7 +206,12 @@ class Player(pygame.sprite.Sprite):
         player_idle.draw(screen)
                    
 class Background():
-      def __init__(self):
+    '''
+    Class background
+    Vẽ nền 
+    Tạo background chạy dọc
+    '''
+    def __init__(self):
             self.bgimage = BG
             self.rectBGimg = self.bgimage.get_rect()
             
@@ -205,7 +224,7 @@ class Background():
  
             self.movingUpSpeed = 5
          
-      def update(self):
+    def update(self):
         self.bgY1 -= self.movingUpSpeed
         self.bgY2 -= self.movingUpSpeed
         if self.bgY1 <= -self.rectBGimg.height:
@@ -213,19 +232,15 @@ class Background():
         if self.bgY2 <= -self.rectBGimg.height:
             self.bgY2 = self.rectBGimg.height
              
-      def draw(self):
+    def draw(self):
         DISPLAYSURF.blit(self.bgimage, (self.bgX1, self.bgY1))
         DISPLAYSURF.blit(self.bgimage, (self.bgX2, self.bgY2))
         DISPLAYSURF.blit(METALFLOOR,(0,SCREEN_HEIGHT-150))
         DISPLAYSURF.blit(METALFLOOR,(150,SCREEN_HEIGHT-150))
-        DISPLAYSURF.blit(METALFLOOR,(300,SCREEN_HEIGHT-150))
-        # DISPLAYSURF.blit(GRASS,(0,SCREEN_HEIGHT-(150*2)))
+        DISPLAYSURF.blit(METALFLOOR,(300,SCREEN_HEIGHT-150)) 
         DISPLAYSURF.blit(METALFLOOR,(450,SCREEN_HEIGHT-150))
         DISPLAYSURF.blit(FRAME,(245,0))
-        # DISPLAYSURF.blit(GRASS,(SCREEN_WIDTH-300,SCREEN_HEIGHT-(150*2)))
         
-         
-
 #Setting up Sprites        
 P1 = Player()
 E1 = Enemy()
@@ -239,27 +254,10 @@ enemies.add(E1)
 Char = pygame.sprite.Group()
 Char.add(P1)
 
-
-
-
-
-
-# obj_group=pygame.sprite.Group()
-
-
 #Adding a new User event 
 INC_SPEED = pygame.USEREVENT + 1
 pygame.time.set_timer(INC_SPEED, 1000)
     
-# def gameover():
-#     # DISPLAYSURF.fill(WHITE)
-#     Game_over_label=font.render("GOODLUCK NEXT TIME",1,BLACK)
-#     Restart_label=font.render("PRESS SPACE TO RESTART",1,BLACK)
-#     DISPLAYSURF.blit(Game_over_label,(SCREEN_WIDTH/2 - Game_over_label.get_width()/2, 400))
-#     DISPLAYSURF.blit(Restart_label,(SCREEN_WIDTH/2 - Restart_label.get_width()/2, 500))
-#     pygame.display.update()
-
-
 def getHighestScore():
     with open("highest score.txt","r") as f:
         return f.read()
@@ -291,19 +289,13 @@ def play():
     except:
         highestScore = 0
 
-    
-
     while run:
-            # entity.move()
         #Cycles through all occurring events   
         for event in pygame.event.get():
             if event.type == INC_SPEED:
                 SPEED += 0.1     
             if event.type == QUIT:
                 run=False
-            # elif event.type == pygame.KEYUP:
-            #     if event.key == pygame.K_SPACE:
-            #             GameStage()
             if pygame.mouse.get_pressed()[0]:
                     positionX,positionY=pygame.mouse.get_pos()
                     line.append((pygame.mouse.get_pos()))
@@ -311,11 +303,6 @@ def play():
             else:
                     if playerDraw==True:
                         playerDraw=False
-                        # pxarray = imagePredict.get_pixel_data(screen,[701,401],[1000,700])
-                        # print(pxarray.shape)
-                        # plt.imsave('image.png',pxarray)
-                        # pygame.image.save(pxarray,'input.png')
-                        # PredictResult=imagePredict.Proccess(W,yDraw,RANK,line)
                         PredictResult=grap.Proccess(line)
                         line=[]
                         if PredictResult:
@@ -324,20 +311,13 @@ def play():
                             grap.CreateGraph(RANK)
                             # W,yDraw=generator.CreateGraph(RANK,'dothi.png')
                             dothi=pygame.image.load('dothi.png').convert_alpha()
-                            # obj=pygame.transform.scale(dothi,(objwidth ,objheight)).convert_alpha()
                             hinhdothi=pygame.transform.scale(dothi,(100 ,100)).convert_alpha()               
             if event.type ==pygame.KEYDOWN:
                     if event.key==pygame.K_p:
                         line=[]
-            # if event.type == pygame.KEYUP:
-            #     if event.key == pygame.K_SPACE and gameover:
-            #         for entity in all_sprites:
-            #             DISPLAYSURF.blit(entity.image, entity.rect)
-            #             entity.move()
         bg.update()
         bg.draw()
         DISPLAYSURF.blit(hinhdothi,(250,5)) 
-        #DISPLAYSURF.blit(background, (0,0))
 
         if(highestScore < LIFE):
             highestScore = LIFE
@@ -352,17 +332,10 @@ def play():
     
         #Moves and Re-draws all Sprites
         Player1.move()
-        # for entity in Char:
-        #     DISPLAYSURF.blit(entity.image, entity.rect)
-        #     entity.move()
-        # conclide=False
         for entity in enemies:
             DISPLAYSURF.blit(entity.image, entity.rect)
             echk=entity.move()
-            # if echk:
-            #     conclide=True
-        # if conclide:
-        #     LIFE -= 2
+
         with open('ID.txt', 'r') as file:
             data = file.readlines()
         SELECTED1=data[10][9:]
@@ -378,44 +351,17 @@ def play():
                 else:
                     pygame.draw.line(DISPLAYSURF,SELECTED1[0],(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),9)
                     pygame.draw.line(DISPLAYSURF,SELECTED2[0],(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),5)
-                # pygame.draw.line(DISPLAYSURF,WHITE,(line[i-1][0],line[i-1][1]),(line[i][0],line[i][1]),3)
+                
         #To be run if collision occurs between Player and Enemy
         # print(Player1.rect,'',E1.rect)
-        if pygame.sprite.collide_rect(Player1,E1):
-        #     #   pygame.mixer.Sound('crash.wav').play()
-        #     #   time.sleep(0.8)
-            
+        if pygame.sprite.collide_rect(Player1,E1): 
             print('collide')
             run=False
             E1.rect.top = 0
             Player1.rect.center=(300, 700)
             line=[]
             GameOver(LIFE)
-        #     # DISPLAYSURF.fill(RED)
-        #     # DISPLAYSURF.blit(game_over, (30,250))
-            
-            
-        #     # for entity in enemies:
-        #     #         # entity.kill()
-        #     #         LIFE=LIFE - 1 
-        # if LIFE<=0:
-        #         # GameOver()
-        #         # time.sleep(1.5)
-        #         # pygame.quit()
-        #         # sys.exit()  
-        #     GameOver()
-        # if run==False:
-        #     LIFE=11
-        #     gameover()
-        #     time.sleep(2)
-        #     GameStage()
-            
-        # for event in pygame.event.get():
-            
-            # pygame.display.update()
-            # time.sleep(1.5)
-            # pygame.quit()
-            # sys.exit()
+        
         Player1.draw(DISPLAYSURF)
         pygame.display.update()
         fpsclock.tick(FPS)
@@ -425,10 +371,8 @@ def play():
 
 
 def listToString(s): 
-    
     # initialize an empty string
     str1 = "" 
-    
     # traverse in the string  
     for ele in s: 
         str1 += ele  
@@ -445,14 +389,10 @@ def Buyitems(screen,textPosition,text,bColor="Gray",hColor="Green"):
     STORE_BUY= Button(image=None, pos=textPosition, text_input= text, font=get_font(30), base_color=bColor, hovering_color=hColor)
     return STORE_BUY
 
-
-
-
 def shop():
     while True:
         SCREEN.fill(WHITE)
-        #SCREEN.blit(the, (40, -140))
-
+        
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
         SHOP_TEXT = get_font(30).render("shop", True,BLACK)
@@ -477,8 +417,6 @@ def shop():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                # if CREDIT_BUTTON.checkForInput(MENU_MOUSE_POS):
-                #    lan()
                 if SHOP_BALL_BUTTON.checkForInput(MENU_MOUSE_POS):
                     store_1()
                 if SHOP_LINE_BUTTON.checkForInput(MENU_MOUSE_POS):
@@ -496,10 +434,7 @@ def store_line_1():
             data = file.readlines()
         SELECTED=data[6][9:]
         SELECTED=list(map(int,SELECTED.split()))
-        # SELECTEDLINE=data[10][9:]
-        # SELECTEDLINE=list(SELECTEDLINE.split())
         BOUGHT=data[35:38]
-        # print(SELECTED)
         STORE_MOUSE_POS = pygame.mouse.get_pos()
      
         SCREEN.fill(WHITE)
@@ -530,16 +465,12 @@ def store_line_1():
 
         
         #make character store                    
-        STORE_BUY_line1=items(SCREEN,nv1,(50,200),(300,250),ITEMS[0])
-        # STORE_BUY_BUTTON_nv1=Buyitems(SCREEN,(520,250),'100')
+        STORE_BUY_line1=items(SCREEN,green,(50,200),(300,250),ITEMS[0])
+    
+        STORE_BUY_line2= items(SCREEN,black,(50,350),(300,400),ITEMS[1])
         
-        STORE_BUY_line2= items(SCREEN,nv2,(50,350),(300,400),ITEMS[1])
-        
-        # STORE_BUY_BUTTON_nv2=Buyitems(SCREEN,(520,400),'100')
-
-        STORE_BUY_line3= items(SCREEN,nv3,(50,500),(300,550),ITEMS[2])
-        # STORE_BUY_BUTTON_nv3=Buyitems(SCREEN,(520,550),'100')
-
+        STORE_BUY_line3= items(SCREEN,yellow,(50,500),(300,550),ITEMS[2])
+    
         for button in [OPTIONS_BACK_MENU,OPTIONS_MENU,OPTIONS_NEXT,STORE_BUY_line1,STORE_BUY_line2,STORE_BUY_line3]:
             button.changeColor(STORE_MOUSE_POS)
             button.update(SCREEN)
@@ -574,8 +505,6 @@ def store_line_1():
                         data[35]=st
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
-                        # SELECTED=data[2][9:]
-                        # SELECTED=list(map(int,SELECTED.split(',')))
                         BOUGHT=data[35:38]
                    
                     if CHECK[3]=='OWNED' and STORE_BUY_line1.checkForInput(STORE_MOUSE_POS):
@@ -616,8 +545,6 @@ def store_line_1():
                         data[36]=st
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
-                        # SELECTED=data[2][9:]
-                        # SELECTED=list(map(int,SELECTED.split(',')))
                         BOUGHT=data[35:38]
                    
                     if CHECK[3]=='OWNED' and STORE_BUY_line2.checkForInput(STORE_MOUSE_POS):
@@ -658,8 +585,6 @@ def store_line_1():
                         data[37]=st
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
-                        # SELECTED=data[2][9:]
-                        # SELECTED=list(map(int,SELECTED.split(',')))
                         BOUGHT=data[35:38]
                    
                     if CHECK[3]=='OWNED' and STORE_BUY_line3.checkForInput(STORE_MOUSE_POS):
@@ -732,15 +657,11 @@ def store_line_2():
 
         
         #make character store                    
-        STORE_BUY_line4=items(SCREEN,nv1,(50,200),(300,250),ITEMS[0])
-        # STORE_BUY_BUTTON_nv1=Buyitems(SCREEN,(520,250),'100')
+        STORE_BUY_line4=items(SCREEN,aqua,(50,200),(300,250),ITEMS[0])
         
-        STORE_BUY_line5= items(SCREEN,nv2,(50,350),(300,400),ITEMS[1])
-        
-        # STORE_BUY_BUTTON_nv2=Buyitems(SCREEN,(520,400),'100')
+        STORE_BUY_line5= items(SCREEN,teal,(50,350),(300,400),ITEMS[1])
 
-        STORE_BUY_line6= items(SCREEN,nv3,(50,500),(300,550),ITEMS[2])
-        # STORE_BUY_BUTTON_nv3=Buyitems(SCREEN,(520,550),'100')
+        STORE_BUY_line6= items(SCREEN,lava,(50,500),(300,550),ITEMS[2])
 
         for button in [OPTIONS_BACK_MENU,OPTIONS_MENU,OPTIONS_NEXT,STORE_BUY_line4,STORE_BUY_line5,STORE_BUY_line6]:
             button.changeColor(STORE_MOUSE_POS)
@@ -762,8 +683,6 @@ def store_line_2():
                     store_line_1()
                 if OPTIONS_MENU.checkForInput(STORE_MOUSE_POS):
                     main_menu()
-                # if OPTIONS_NEXT.checkForInput(STORE_MOUSE_POS):
-                #     store_2()
                 if STORE_BUY_line4.checkForInput(STORE_MOUSE_POS):
                     CHECK=data[40]
                     CHECK=CHECK.split()
@@ -776,8 +695,6 @@ def store_line_2():
                         data[40]=st
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
-                        # SELECTED=data[2][9:]
-                        # SELECTED=list(map(int,SELECTED.split(',')))
                         BOUGHT=data[40:43]
                    
                     if CHECK[3]=='OWNED' and STORE_BUY_line4.checkForInput(STORE_MOUSE_POS):
@@ -818,8 +735,6 @@ def store_line_2():
                         data[41]=st
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
-                        # SELECTED=data[2][9:]
-                        # SELECTED=list(map(int,SELECTED.split(',')))
                         BOUGHT=data[40:43]
                    
                     if CHECK[3]=='OWNED' and STORE_BUY_line5.checkForInput(STORE_MOUSE_POS):
@@ -860,8 +775,6 @@ def store_line_2():
                         data[42]=st
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
-                        # SELECTED=data[2][9:]
-                        # SELECTED=list(map(int,SELECTED.split(',')))
                         BOUGHT=data[40:43]
                    
                     if CHECK[3]=='OWNED' and STORE_BUY_line6.checkForInput(STORE_MOUSE_POS):
@@ -903,7 +816,6 @@ def store_1():
         SELECTED=data[2][9:]
         SELECTED=list(map(int,SELECTED.split()))
         BOUGHT=data[20:23]
-        # print(SELECTED)
         STORE_MOUSE_POS = pygame.mouse.get_pos()
      
         SCREEN.fill(WHITE)
@@ -935,14 +847,10 @@ def store_1():
         
         #make character store                    
         STORE_BUY_nv1=items(SCREEN,nv1,(50,200),(300,250),ITEMS[0])
-        # STORE_BUY_BUTTON_nv1=Buyitems(SCREEN,(520,250),'100')
         
         STORE_BUY_nv2= items(SCREEN,nv2,(50,350),(300,400),ITEMS[1])
-        
-        # STORE_BUY_BUTTON_nv2=Buyitems(SCREEN,(520,400),'100')
 
         STORE_BUY_nv3= items(SCREEN,nv3,(50,500),(300,550),ITEMS[2])
-        # STORE_BUY_BUTTON_nv3=Buyitems(SCREEN,(520,550),'100')
 
         for button in [OPTIONS_BACK_MENU,OPTIONS_MENU,OPTIONS_NEXT,STORE_BUY_nv1,STORE_BUY_nv2,STORE_BUY_nv3]:
             button.changeColor(STORE_MOUSE_POS)
@@ -999,8 +907,6 @@ def store_1():
                         data[21]=st
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
-                        # SELECTED=data[2][9:]
-                        # SELECTED=list(map(int,SELECTED.split(',')))
                         BOUGHT=data[20:23]
                    
                     if CHECK[3]=='OWNED' and STORE_BUY_nv2.checkForInput(STORE_MOUSE_POS):
@@ -1028,8 +934,6 @@ def store_1():
                         data[22]=st
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
-                        # SELECTED=data[2][9:]
-                        # SELECTED=list(map(int,SELECTED.split(',')))
                         BOUGHT=data[20:23]
                     if CHECK[3]=='OWNED' and STORE_BUY_nv3.checkForInput(STORE_MOUSE_POS):
                         print(3333)
@@ -1047,11 +951,6 @@ def store_1():
 def store_2():
     playerCoi=addCoin()
     ITEMS=['EARTH BALL','KNIFE BALL','PUPLE BALL']
-    # with open('ID.txt', 'r') as file:
-    #     data = file.readlines()
-    # SELECTED=data[2][9:]
-    # SELECTED=list(map(int,SELECTED.split(',')))
-    # BOUGHT=data[30:33]
     while True:
 
         with open('ID.txt', 'r') as file:
@@ -1090,13 +989,10 @@ def store_2():
         #make character store                    
     
         STORE_BUY_nv4= items(SCREEN,nv4,(50,200),(300,250),ITEMS[0])
-        # STORE_BUY_BUTTON_nv4=Buyitems(SCREEN,(520,250),'BUY')
 
         STORE_BUY_nv5= items(SCREEN,nv5,(50,350),(300,400),ITEMS[1])
-        # STORE_BUY_BUTTON_nv5=Buyitems(SCREEN,(520,400),'BUY')
 
         STORE_BUY_nv6= items(SCREEN,nv6,(50,500),(300,550),ITEMS[2])
-        # STORE_BUY_BUTTON_nv6=Buyitems(SCREEN,(520,550),'BUY')
 
         for button in [OPTIONS_BACK,OPTIONS_MENU,OPTIONS_NEXT,STORE_BUY_nv4,STORE_BUY_nv5,STORE_BUY_nv6]:
             button.changeColor(STORE_MOUSE_POS)
@@ -1136,8 +1032,6 @@ def store_2():
                         data[30]=st
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
-                        # SELECTED=data[2][9:]
-                        # SELECTED=list(map(int,SELECTED.split(',')))
                         BOUGHT=data[30:33]
                     if CHECK[3]=='OWNED' and STORE_BUY_nv4.checkForInput(STORE_MOUSE_POS):
                         print(4444)
@@ -1162,8 +1056,6 @@ def store_2():
                         data[31]=st
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
-                        # SELECTED=data[2][9:]
-                        # SELECTED=list(map(int,SELECTED.split(',')))
                         BOUGHT=data[30:33]
                     if CHECK[3]=='OWNED' and STORE_BUY_nv5.checkForInput(STORE_MOUSE_POS):
                         print(5555)
@@ -1188,8 +1080,6 @@ def store_2():
                         data[32]=st
                         with open("ID.txt","w") as f:
                             f.write(listToString(data))
-                        # SELECTED=data[2][9:]
-                        # SELECTED=list(map(int,SELECTED.split(',')))
                         BOUGHT=data[30:33]
                     if CHECK[3]=='OWNED' and STORE_BUY_nv6.checkForInput(STORE_MOUSE_POS):
                         print(6666)
@@ -1291,22 +1181,13 @@ def GameOver(point):
                     main_menu()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if GAME_OVER_AGAIN.checkForInput(GAME_OVER_MOUSE_POS):
-                    # global LIFE
-                    LIFE=0
-                    # global SPEED
-                    SPEED=3
-                    # global RANK
-                    RANK=1
-                    # global line
-                    
-                    # global playerDraw
+                    LIFE=0               
+                    SPEED=3                    
+                    RANK=1                   
                     playerDraw=False
-                    # global W,yDraw
-                    grap.CreateGraph(RANK)
-                    # global hinhdothi
+                    grap.CreateGraph(RANK)   
                     dothi=pygame.image.load('dothi.png').convert_alpha()
                     hinhdothi=pygame.transform.scale(dothi,(100 ,100)).convert_alpha()
-
                     play()
 
         pygame.display.update()
@@ -1316,7 +1197,6 @@ def main_menu():
     
     while True:
         SCREEN.fill(WHITE)
-        # SCREEN.blit(the, (40, -140))
 
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
@@ -1344,8 +1224,6 @@ def main_menu():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                # if CREDIT_BUTTON.checkForInput(MENU_MOUSE_POS):
-                #    lan()
                 if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
                     play()
                 if STORE_BUTTON.checkForInput(MENU_MOUSE_POS):

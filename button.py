@@ -1,6 +1,13 @@
 
 
 class Button():
+	'''
+	Class nút bấm
+	Tạo sự kiện cho các nút bấm
+	Bấm nút 
+	Thay đổi màu khi nhấp chuột: hoving
+	'''
+	
 	def __init__(self, image, pos, text_input, font, base_color, hovering_color):
 		self.image = image
 		self.x_pos = pos[0]
