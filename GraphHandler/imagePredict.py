@@ -1,5 +1,6 @@
 import numpy as np
 import pygame
+import matplotlib.pyplot as plt
 def leftBorderDetect(img):
   for x in range(img.shape[1]):
     border=False
@@ -135,9 +136,9 @@ def Proccess(W,yDraw,RANK,line):
     print('distance before fit center',centerDistanceY)
     poiY=fitCenterY(poiY,centerDistanceY) #fit center
     centerDistanceY=Ycenter-poiY[len(poiY)//2]
-    # plt.plot(poiX,poiY,'red')
-    # plt.plot(pointsX,yDraw,'blue')
-    # plt.show()
+    plt.plot(poiX,poiY,'red')
+    plt.plot(pointsX,yDraw,'blue')
+    plt.show()
     print('distance after fit center',centerDistanceY)
     print('loss after fit center',loss(poiX,poiY,min(yDraw),max(yDraw),RANK,W))
     print('limit',min(yDraw),max(yDraw))

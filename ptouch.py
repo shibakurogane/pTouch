@@ -194,10 +194,10 @@ class Player(pygame.sprite.Sprite):
         pressed_keys = pygame.key.get_pressed()
         if self.rect.left > 0:
               if pressed_keys[K_LEFT] or pressed_keys[K_a]:
-                  self.rect.move_ip(-10, 0)
+                  self.rect.move_ip(-7, 0)
         if self.rect.right < SCREEN_WIDTH:        
               if pressed_keys[K_RIGHT] or pressed_keys[K_d]:
-                  self.rect.move_ip(10, 0)
+                  self.rect.move_ip(7, 0)
     
     def draw(self,screen):
         player_idle=pygame.sprite.Group()
