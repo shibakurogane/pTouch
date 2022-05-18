@@ -830,7 +830,7 @@ def store_1():
         
         pygame.draw.rect(SCREEN,'Gray', pygame.Rect(SELECTED[0],SELECTED[1],SELECTED[2],SELECTED[3]))
     
-        OPTIONS_TEXT = get_font(20).render("STORE", True, BLACK)
+        OPTIONS_TEXT = get_font(20).render("BALL", True, BLACK)
         OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(SCREEN_W/2,100))
         SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
@@ -973,7 +973,7 @@ def store_2():
 
         pygame.draw.rect(SCREEN,'Gray', pygame.Rect(SELECTED[0],SELECTED[1],SELECTED[2],SELECTED[3]))
 
-        OPTIONS_TEXT = get_font(20).render("STORE", True, BLACK)
+        OPTIONS_TEXT = get_font(20).render("BALL", True, BLACK)
         OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(SCREEN_W/2,100))
         SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
