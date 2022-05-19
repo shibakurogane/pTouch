@@ -4,13 +4,13 @@ selected 0 -200 800 0
 
 selected 0 -200 800 0
 
-selected 0 500 800 100
+selected 0 350 800 100
 
-selected 0 500 800 100
+selected 0 200 800 100
 
-selected LAVA 7
+selected AQUA 7
 
-selected BLOOD 7
+selected WHITE 7
 
 
 
