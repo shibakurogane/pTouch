@@ -2,4 +2,4 @@
 
 ## Chạy file ptouch để chơi game
 
-![Alt text](example.png)
+![Example](https://github.com/shibakurogane/pTouch/example.png)
