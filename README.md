@@ -1,3 +1,3 @@
 # pTouch
 
-##Chạy file ptouch để chơi game
+## Chạy file ptouch để chơi game
