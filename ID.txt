@@ -2,7 +2,7 @@
 2
 selected 0 -200 800 0
 
-selected 0 -200 800 0
+selected 0 200 800 100
 
 selected 0 500 800 100
 

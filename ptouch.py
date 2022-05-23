@@ -1,74 +1,18 @@
-from cProfile import run
-from doctest import FAIL_FAST
-from enum import Flag
-from lzma import CHECK_CRC32
-from pickle import GLOBAL
-from turtle import up, update
-from cv2 import line
-import pygame, sys
-
-from pygame.locals import *
-import random, time
-
-from pyparsing import White
-from GraphHandler import generator,imagePredict
-import numpy as np
-import matplotlib.pyplot as plt
-import cv2
-
-from button import Button
-def addCoin(point=0):
-    try:
-        playerCoin = int(Coin())
-    except:
-        playerCoin = 0
-    playerCoin+=point
-    with open("coin.txt","w") as f:
-            f.write(str(playerCoin))
-    return playerCoin
+from utils import *
 
 pygame.init()
- 
+INC_SPEED = pygame.USEREVENT + 1
+pygame.time.set_timer(INC_SPEED, 1000)
 # FPS 
-FPS = 144
 fpsclock = pygame.time.Clock()
  
 # colors
-BLUE  = (0, 0, 255)
-RED   = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-YELLOW = (255, 255, 102)
-BLUE2  = (0, 212, 255)
-PURPLE2 = (239, 0 ,255)
-AQUA	=	(0,255,255)
-MAGENTA =	(255,0,255)
-SILVER	=	(192,192,192)
-GRAY	=	(128,128,128)
-MAROON	=	(128,0,0)
-OLIVE	=	(128,128,0)
-PURPLE	=	(128,0,128)
-TEAL	=	(0,128,128)
-LAVA    =   (252,176,69)
-BLOOD   =   (253,29,29)
-#
-SCREEN_WIDTH = 600
-SCREEN_HEIGHT = 800
-SCREEN_W=600
-SCREEN_H=800
-SPEED=3
-LIFE = 0
+
 
 playerCoin=0
 
-line=[]
+line=[] #STORE INPUT DRAWING
 
-objheight=200
-objwidth=150
- 
-nv_height=50
-nv_width=50
 
 nv_w=100
 nv_h=100
@@ -83,21 +27,20 @@ font_small = pygame.font.SysFont("Verdana", 20)
 #Create a white screen 
 DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 SCREEN = pygame.display.set_mode((SCREEN_W, SCREEN_H))
-# DISPLAYSURF.fill(WHITE)
 pygame.display.set_caption("ptouch")
 
 RANK=1
 grap=generator.Graph('dothi.png')
 grap.CreateGraph(RANK)
-# W,yDraw=generator.CreateGraph(RANK,'dothi.png')
+
 dothi=pygame.image.load('dothi.png').convert_alpha()
 hinhdothi=pygame.transform.scale(dothi,(100 ,100)).convert_alpha()
 
 obj=pygame.image.load('image/enemy/bigdrill_3.png').convert_alpha()
-obj=pygame.transform.scale(obj,(objwidth ,objheight)).convert_alpha()
+obj=pygame.transform.scale(obj,(OBJWIDTH ,OBJHEIGHT)).convert_alpha()
 
 nv = pygame.image.load('image/ball/hexagont.png').convert_alpha()
-nv = pygame.transform.scale(nv,(nv_width,nv_height))
+nv = pygame.transform.scale(nv,(NVWIDTH,NVHEIGHT))
  
 BG=pygame.image.load('image/background/gray3.png').convert_alpha()
 BG=pygame.transform.scale(BG,(SCREEN_WIDTH,1000))
@@ -153,100 +96,14 @@ menuimage=pygame.transform.scale(pink,(200,80))
 buybutton=pygame.transform.scale(pink,(200,100))
 
 
-class Enemy(pygame.sprite.Sprite):
-    '''
-    class tượng trưng cho kẻ thù 
-    Kẻ thù sẽ rơi từ trên xuống với tốc độ tăng dần và ngẫu nhiên
-    Nếu chạm trúng người chơi, trò chơi sẽ kết thúc
-    '''
-    def __init__(self):
-        super().__init__() 
-        self.image = obj
-        self.surf = pygame.Surface((objwidth ,objheight))
-        self.rect = self.surf.get_rect(center = (random.randint(objwidth,SCREEN_WIDTH-objwidth), 0))
-        self.alive=True
-        
 
-    def move(self):
-            global LIFE
-            self.rect.move_ip(0,SPEED)
-            if (self.rect.bottom >= (SCREEN_HEIGHT-75)):
-                
-                self.rect.top = 0
-                self.rect.center = (random.randint(objwidth//2,SCREEN_WIDTH-objwidth//2), 0)
-                return True
-            return False            
-                
-            
- 
-class Player(pygame.sprite.Sprite):
-    '''
-    Class người chơi
-    Người chơi được phép di chuyển trái phải cới tốc độ dược đặt trước
-    '''
-    def __init__(self):
-        super().__init__() 
-        self.image = nv
-        self.surf = pygame.Surface((nv_width,nv_height))
-        self.rect = self.surf.get_rect(center = (SCREEN_WIDTH/2, SCREEN_HEIGHT-100))
-        
-    def move(self):
-        pressed_keys = pygame.key.get_pressed()
-        if self.rect.left > 0:
-              if pressed_keys[K_LEFT] or pressed_keys[K_a]:
-                  self.rect.move_ip(-7, 0)
-        if self.rect.right < SCREEN_WIDTH:        
-              if pressed_keys[K_RIGHT] or pressed_keys[K_d]:
-                  self.rect.move_ip(7, 0)
-    
-    def draw(self,screen):
-        player_idle=pygame.sprite.Group()
-        player_idle.add(self)
-        player_idle.update(0.5)
-        player_idle.draw(screen)
-                   
-class Background():
-    '''
-    Class background
-    Vẽ nền 
-    Tạo background chạy dọc
-    '''
-    def __init__(self):
-            self.bgimage = BG
-            self.rectBGimg = self.bgimage.get_rect()
-            
- 
-            self.bgY1 = 0
-            self.bgX1 = 0
- 
-            self.bgY2 = self.rectBGimg.height
-            self.bgX2 = 0
- 
-            self.movingUpSpeed = 5
-         
-    def update(self):
-        self.bgY1 -= self.movingUpSpeed
-        self.bgY2 -= self.movingUpSpeed
-        if self.bgY1 <= -self.rectBGimg.height:
-            self.bgY1 = self.rectBGimg.height
-        if self.bgY2 <= -self.rectBGimg.height:
-            self.bgY2 = self.rectBGimg.height
-             
-    def draw(self):
-        DISPLAYSURF.blit(self.bgimage, (self.bgX1, self.bgY1))
-        DISPLAYSURF.blit(self.bgimage, (self.bgX2, self.bgY2))
-        DISPLAYSURF.blit(METALFLOOR,(0,SCREEN_HEIGHT-150))
-        DISPLAYSURF.blit(METALFLOOR,(150,SCREEN_HEIGHT-150))
-        DISPLAYSURF.blit(METALFLOOR,(300,SCREEN_HEIGHT-150)) 
-        DISPLAYSURF.blit(METALFLOOR,(450,SCREEN_HEIGHT-150))
-        DISPLAYSURF.blit(FRAME,(245,0))
         
 #Setting up Sprites        
-P1 = Player()
-E1 = Enemy()
-Player1=Player()
+P1 = Player(nv)
+E1 = Enemy(obj)
+Player1=Player(nv)
  
-bg = Background()
+bg = Background(BG)
  
 #Creating Sprites Groups
 enemies = pygame.sprite.Group()
@@ -258,20 +115,9 @@ Char.add(P1)
 INC_SPEED = pygame.USEREVENT + 1
 pygame.time.set_timer(INC_SPEED, 1000)
     
-def getHighestScore():
-    with open("highest score.txt","r") as f:
-        return f.read()
 
-def Coin():
-    with open("coin.txt","r") as f:
-        return f.read()
 
-def get_font(size): 
-    return pygame.font.Font("8-BIT WONDER.TTF", size)
 
-def ShopID():
-    with open("ID.txt","r") as f:
-        return f.read()
 
 playerDraw=False
 def play():
@@ -285,7 +131,7 @@ def play():
     global RANK
 
     try:
-        highestScore = int(getHighestScore())
+        highestScore = int(openTxt('highest score.txt'))
     except:
         highestScore = 0
 
@@ -316,7 +162,7 @@ def play():
                     if event.key==pygame.K_p:
                         line=[]
         bg.update()
-        bg.draw()
+        bg.draw(DISPLAYSURF,METALFLOOR,FRAME)
         DISPLAYSURF.blit(hinhdothi,(250,5)) 
 
         if(highestScore < LIFE):
@@ -370,15 +216,7 @@ def play():
 
 
 
-def listToString(s): 
-    # initialize an empty string
-    str1 = "" 
-    # traverse in the string  
-    for ele in s: 
-        str1 += ele  
-    
-    # return string  
-    return str1 
+
 # GameStage()
 def items(screen,nv,ImgPosition,textPosition,text,bColor="Black",hColor="Green"):
     SCREEN.blit(nv,ImgPosition)
@@ -426,7 +264,7 @@ def shop():
 
         pygame.display.update()
 def store_line_1():
-    playerCoi=addCoin()
+    playerCoi=addCoin('coin.txt')
     ITEMS=['GREEN','BLACK','YELLOW']
     while True:
         
@@ -615,7 +453,7 @@ def store_line_1():
         pygame.display.update()
         
 def store_line_2():
-    playerCoi=addCoin()
+    playerCoi=addCoin('coin.txt')
     ITEMS=['AQUA','TEAL','LAVA']
     while True:
         
@@ -807,7 +645,7 @@ def store_line_2():
         
 
 def store_1():
-    playerCoi=addCoin()
+    playerCoi=addCoin('coin.txt')
     ITEMS=['HEXAGON','CITYBALL','METALBALL']
     while True:
         
@@ -886,7 +724,7 @@ def store_1():
                     CHECK=CHECK.split()
                     if CHECK[3]=='OWNED' and STORE_BUY_nv1.checkForInput(STORE_MOUSE_POS):
                         print(1111)                  
-                        Player1.image= pygame.transform.scale(pygame.image.load('image/ball/hexagont.png'),(nv_width,nv_height)).convert_alpha()
+                        Player1.image= pygame.transform.scale(pygame.image.load('image/ball/hexagont.png'),(NVWIDTH,NVHEIGHT)).convert_alpha()
                         temp=data[2].split()
                         temp[2]='200'
                         temp[4]='100\n'
@@ -911,7 +749,7 @@ def store_1():
                    
                     if CHECK[3]=='OWNED' and STORE_BUY_nv2.checkForInput(STORE_MOUSE_POS):
                         print(2222)                  
-                        Player1.image= pygame.transform.scale(pygame.image.load('image/ball/cityball.png'),(nv_width,nv_height)).convert_alpha()
+                        Player1.image= pygame.transform.scale(pygame.image.load('image/ball/cityball.png'),(NVWIDTH,NVHEIGHT)).convert_alpha()
                         temp=data[2].split()
                         temp[2]='350'
                         temp[4]='100\n'
@@ -937,7 +775,7 @@ def store_1():
                         BOUGHT=data[20:23]
                     if CHECK[3]=='OWNED' and STORE_BUY_nv3.checkForInput(STORE_MOUSE_POS):
                         print(3333)
-                        Player1.image= pygame.transform.scale(pygame.image.load('image/ball/metal_ball.png'),(nv_width,nv_height)).convert_alpha()
+                        Player1.image= pygame.transform.scale(pygame.image.load('image/ball/metal_ball.png'),(NVWIDTH,NVHEIGHT)).convert_alpha()
                         temp=data[2].split()
                         temp[2]='500'
                         temp[4]='100\n'
@@ -949,7 +787,7 @@ def store_1():
         pygame.display.update()
 
 def store_2():
-    playerCoi=addCoin()
+    playerCoi=addCoin('coin.txt')
     ITEMS=['EARTH BALL','KNIFE BALL','PUPLE BALL']
     while True:
 
@@ -1035,7 +873,7 @@ def store_2():
                         BOUGHT=data[30:33]
                     if CHECK[3]=='OWNED' and STORE_BUY_nv4.checkForInput(STORE_MOUSE_POS):
                         print(4444)
-                        Player1.image= pygame.transform.scale(pygame.image.load('image/ball/earthball.png'),(nv_width,nv_height)).convert_alpha()
+                        Player1.image= pygame.transform.scale(pygame.image.load('image/ball/earthball.png'),(NVWIDTH,NVHEIGHT)).convert_alpha()
                         temp=data[4].split()
                         temp[2]='200'
                         temp[4]='100\n'
@@ -1059,7 +897,7 @@ def store_2():
                         BOUGHT=data[30:33]
                     if CHECK[3]=='OWNED' and STORE_BUY_nv5.checkForInput(STORE_MOUSE_POS):
                         print(5555)
-                        Player1.image= pygame.transform.scale(pygame.image.load('image/ball/knifeball.png'),(nv_width,nv_height)).convert_alpha()
+                        Player1.image= pygame.transform.scale(pygame.image.load('image/ball/knifeball.png'),(NVWIDTH,NVHEIGHT)).convert_alpha()
                         temp=data[4].split()
                         temp[2]='350'
                         temp[4]='100\n'
@@ -1083,7 +921,7 @@ def store_2():
                         BOUGHT=data[30:33]
                     if CHECK[3]=='OWNED' and STORE_BUY_nv6.checkForInput(STORE_MOUSE_POS):
                         print(6666)
-                        Player1.image= pygame.transform.scale(pygame.image.load('image/ball/ppball.png'),(nv_width,nv_height)).convert_alpha()
+                        Player1.image= pygame.transform.scale(pygame.image.load('image/ball/ppball.png'),(NVWIDTH,NVHEIGHT)).convert_alpha()
                         temp=data[4].split()
                         temp[2]='500'
                         temp[4]='100\n'
@@ -1136,7 +974,7 @@ def credit():
         pygame.display.update()
 
 def GameOver(point):
-    addCoin(point)
+    addCoin('coin.txt',point)
     
     while True:
         GAME_OVER_MOUSE_POS = pygame.mouse.get_pos()
