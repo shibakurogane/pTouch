@@ -286,7 +286,7 @@ def store_line_1():
                 OPTEXT = get_font(20).render("OWNED", True,'Gray')
                 SCREEN.blit(OPTEXT,(XC,YC))
             else: 
-                OPTEXT = get_font(20).render("1000", True,'Gray')
+                OPTEXT = get_font(20).render("50", True,'Gray')
                 SCREEN.blit(OPTEXT,(XC+20,YC))
         
         pygame.draw.rect(SCREEN,'Gray', pygame.Rect(SELECTED[0],SELECTED[1],SELECTED[2],SELECTED[3]))
@@ -337,8 +337,8 @@ def store_line_1():
                 if STORE_BUY_line1.checkForInput(STORE_MOUSE_POS):
                     CHECK=data[35]
                     CHECK=CHECK.split()
-                    if playerCoi>=1000 and CHECK[3]=='BUYNT':
-                        playerCoi+=-1000
+                    if playerCoi>=50 and CHECK[3]=='BUYNT':
+                        playerCoi+=-50
                         temp=data[35]
                         temp=temp.split()
                         temp[3]='OWNED\n'
@@ -377,8 +377,8 @@ def store_line_1():
                 if STORE_BUY_line2.checkForInput(STORE_MOUSE_POS):
                     CHECK=data[36]
                     CHECK=CHECK.split()
-                    if playerCoi>=1000 and CHECK[3]=='BUYNT':
-                        playerCoi+=-1000
+                    if playerCoi>=50 and CHECK[3]=='BUYNT':
+                        playerCoi+=-50
                         temp=data[36]
                         temp=temp.split()
                         temp[3]='OWNED\n'
@@ -417,8 +417,8 @@ def store_line_1():
                 if STORE_BUY_line3.checkForInput(STORE_MOUSE_POS):
                     CHECK=data[37]
                     CHECK=CHECK.split()
-                    if playerCoi>=1000 and CHECK[3]=='BUYNT':
-                        playerCoi+=-1000
+                    if playerCoi>=50 and CHECK[3]=='BUYNT':
+                        playerCoi+=-50
                         temp=data[37]
                         temp=temp.split()
                         temp[3]='OWNED\n'
@@ -478,7 +478,7 @@ def store_line_2():
                 OPTEXT = get_font(20).render("OWNED", True,'Gray')
                 SCREEN.blit(OPTEXT,(XC,YC))
             else: 
-                OPTEXT = get_font(20).render("1000", True,'Gray')
+                OPTEXT = get_font(20).render("50", True,'Gray')
                 SCREEN.blit(OPTEXT,(XC+20,YC))
         
         pygame.draw.rect(SCREEN,'Gray', pygame.Rect(SELECTED[0],SELECTED[1],SELECTED[2],SELECTED[3]))
@@ -527,8 +527,8 @@ def store_line_2():
                 if STORE_BUY_line4.checkForInput(STORE_MOUSE_POS):
                     CHECK=data[40]
                     CHECK=CHECK.split()
-                    if playerCoi>=1000 and CHECK[3]=='BUYNT':
-                        playerCoi+=-1000
+                    if playerCoi>=50 and CHECK[3]=='BUYNT':
+                        playerCoi+=-50
                         temp=data[40]
                         temp=temp.split()
                         temp[3]='OWNED\n'
@@ -567,8 +567,8 @@ def store_line_2():
                 if STORE_BUY_line5.checkForInput(STORE_MOUSE_POS):
                     CHECK=data[41]
                     CHECK=CHECK.split()
-                    if playerCoi>=1000 and CHECK[3]=='BUYNT':
-                        playerCoi+=-1000
+                    if playerCoi>=50 and CHECK[3]=='BUYNT':
+                        playerCoi+=-50
                         temp=data[41]
                         temp=temp.split()
                         temp[3]='OWNED\n'
@@ -607,8 +607,8 @@ def store_line_2():
                 if STORE_BUY_line6.checkForInput(STORE_MOUSE_POS):
                     CHECK=data[42]
                     CHECK=CHECK.split()
-                    if playerCoi>=1000 and CHECK[3]=='BUYNT':
-                        playerCoi+=-1000
+                    if playerCoi>=50 and CHECK[3]=='BUYNT':
+                        playerCoi+=-50
                         temp=data[42]
                         temp=temp.split()
                         temp[3]='OWNED\n'
@@ -667,7 +667,7 @@ def store_1():
                 OPTEXT = get_font(20).render("OWNED", True,'Gray')
                 SCREEN.blit(OPTEXT,(XC,YC))
             else: 
-                OPTEXT = get_font(20).render("1000", True,'Gray')
+                OPTEXT = get_font(20).render("50", True,'Gray')
                 SCREEN.blit(OPTEXT,(XC+20,YC))
         
         pygame.draw.rect(SCREEN,'Gray', pygame.Rect(SELECTED[0],SELECTED[1],SELECTED[2],SELECTED[3]))
@@ -739,8 +739,8 @@ def store_1():
                 if STORE_BUY_nv2.checkForInput(STORE_MOUSE_POS):
                     CHECK=data[21]
                     CHECK=CHECK.split()
-                    if playerCoi>=1000 and CHECK[3]=='BUYNT':
-                        playerCoi+=-1000
+                    if playerCoi>=50 and CHECK[3]=='BUYNT':
+                        playerCoi+=-50
                         temp=data[21]
                         temp=temp.split()
                         temp[3]='OWNED\n'
@@ -766,8 +766,8 @@ def store_1():
                 if STORE_BUY_nv3.checkForInput(STORE_MOUSE_POS):
                     CHECK=data[22]
                     CHECK=CHECK.split()
-                    if playerCoi>=1000 and CHECK[3]=='BUYNT':
-                        playerCoi+=-1000
+                    if playerCoi>=50 and CHECK[3]=='BUYNT':
+                        playerCoi+=-50
                         temp=data[22]
                         temp=temp.split()
                         temp[3]='OWNED\n'
@@ -810,7 +810,7 @@ def store_2():
                 OPTEXT = get_font(20).render("OWNED", True,'Gray')
                 SCREEN.blit(OPTEXT,(XC,YC))
             else: 
-                OPTEXT = get_font(20).render("1000", True,'Gray')
+                OPTEXT = get_font(20).render("50", True,'Gray')
                 SCREEN.blit(OPTEXT,(XC+20,YC))
 
         pygame.draw.rect(SCREEN,'Gray', pygame.Rect(SELECTED[0],SELECTED[1],SELECTED[2],SELECTED[3]))
@@ -864,8 +864,8 @@ def store_2():
                 if  STORE_BUY_nv4.checkForInput(STORE_MOUSE_POS):
                     CHECK=data[30]
                     CHECK=CHECK.split()
-                    if playerCoi>=1000 and CHECK[3]=='BUYNT':
-                        playerCoi+=-1000
+                    if playerCoi>=50 and CHECK[3]=='BUYNT':
+                        playerCoi+=-50
                         temp=data[30]
                         temp=temp.split()
                         temp[3]='OWNED\n'
@@ -888,8 +888,8 @@ def store_2():
                 if  STORE_BUY_nv5.checkForInput(STORE_MOUSE_POS):
                     CHECK=data[31]
                     CHECK=CHECK.split()
-                    if playerCoi>=1000 and CHECK[3]=='BUYNT':
-                        playerCoi+=-1000
+                    if playerCoi>=50 and CHECK[3]=='BUYNT':
+                        playerCoi+=-50
                         temp=data[31]
                         temp=temp.split()
                         temp[3]='OWNED\n'
@@ -912,8 +912,8 @@ def store_2():
                 if  STORE_BUY_nv6.checkForInput(STORE_MOUSE_POS):
                     CHECK=data[32]
                     CHECK=CHECK.split()
-                    if playerCoi>=1000 and CHECK[3]=='BUYNT':
-                        playerCoi+=-1000
+                    if playerCoi>=50 and CHECK[3]=='BUYNT':
+                        playerCoi+=-50
                         temp=data[32]
                         temp=temp.split()
                         temp[3]='OWNED\n'
