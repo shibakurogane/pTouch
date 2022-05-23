@@ -8,7 +8,6 @@ fpsclock = pygame.time.Clock()
  
 # colors
 
-
 playerCoin=0
 
 line=[] #STORE INPUT DRAWING
@@ -95,6 +94,9 @@ menuimage=pygame.transform.scale(pink,(200,80))
 
 buybutton=pygame.transform.scale(pink,(200,100))
 
+#background music
+pygame.mixer.music.load('music/backgroundmusic.wav')
+pygame.mixer.music.play(-1)
 
 
         
@@ -136,6 +138,7 @@ def play():
         highestScore = 0
 
     while run:
+        
         #Cycles through all occurring events   
         for event in pygame.event.get():
             if event.type == INC_SPEED:
@@ -669,7 +672,7 @@ def store_1():
         
         pygame.draw.rect(SCREEN,'Gray', pygame.Rect(SELECTED[0],SELECTED[1],SELECTED[2],SELECTED[3]))
     
-        OPTIONS_TEXT = get_font(20).render("STORE", True, BLACK)
+        OPTIONS_TEXT = get_font(20).render("BALL", True, BLACK)
         OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(SCREEN_W/2,100))
         SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
@@ -812,7 +815,7 @@ def store_2():
 
         pygame.draw.rect(SCREEN,'Gray', pygame.Rect(SELECTED[0],SELECTED[1],SELECTED[2],SELECTED[3]))
 
-        OPTIONS_TEXT = get_font(20).render("STORE", True, BLACK)
+        OPTIONS_TEXT = get_font(20).render("BALL", True, BLACK)
         OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(SCREEN_W/2,100))
         SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
